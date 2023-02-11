@@ -15,6 +15,7 @@ resource "github_repository" "repository" {
   name        = "example-terraform-repository"
   description = "example-terraform-repository"
   visibility  = "private"
+  auto_init   = true
 }
 
 resource "github_repository_file" "create-sealed-secret" {
