@@ -11,9 +11,9 @@ provider "github" {
   owner = "massficePremiere"
 }
 
-resource "github_repository" "repository" {
-  name        = "example-terraform-repository"
-  description = "example-terraform-repository"
-  visibility  = "private"
+# resource "github_repository" "repository" {
+#   name        = "example-terraform-repository"
+#   description = "example-terraform-repository"
+#   visibility  = "private"
 
-}
+# }
