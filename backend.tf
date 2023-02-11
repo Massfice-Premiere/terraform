@@ -1,9 +1,11 @@
 terraform {
   backend "remote" {
-    organization = "MassficeOnline"
+    organization = "{{ORGANIZATION_NAME}}"
 
     workspaces {
-      name = ""
+      name = "{{WORKSPACE_NAME}}"
     }
   }
+
+  required_version = ">= 0.14.0"
 }
