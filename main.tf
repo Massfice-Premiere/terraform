@@ -11,17 +11,17 @@ provider "github" {
   owner = "massficePremiere"
 }
 
-resource "github_repository" "repository" {
-  name        = "example-terraform-repository"
-  description = "example-terraform-repository"
-  visibility  = "private"
-  auto_init   = true
-}
+# resource "github_repository" "repository" {
+#   name        = "example-terraform-repository"
+#   description = "example-terraform-repository"
+#   visibility  = "private"
+#   auto_init   = true
+# }
 
-resource "github_repository_file" "create-sealed-secret" {
-  repository     = github_repository.repository.name
-  branch         = "main"
-  file           = ".github/workflows/create-sealed-secret.yaml"
-  content        = file(".github/workflows/create-sealed-secret.yaml")
-  commit_message = "Added sealed secret workflow"
-}
+# resource "github_repository_file" "create-sealed-secret" {
+#   repository     = github_repository.repository.name
+#   branch         = "main"
+#   file           = ".github/workflows/create-sealed-secret.yaml"
+#   content        = file(".github/workflows/create-sealed-secret.yaml")
+#   commit_message = "Added sealed secret workflow"
+# }
