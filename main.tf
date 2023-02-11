@@ -19,10 +19,6 @@ resource "github_repository" "repository" {
 }
 
 resource "github_repository_file" "create-sealed-secret" {
-  depends_on = [
-    github_repository.repository
-  ]
-
   repository     = github_repository.repository.name
   branch         = "main"
   file           = ".github/workflows/create-sealed-secret.yaml"
