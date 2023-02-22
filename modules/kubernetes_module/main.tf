@@ -37,8 +37,8 @@ resource "helm_release" "nginx_ingress_chart" {
     value = "true"
   }
 
-  set {
-    name  = "service.annotations.helm\\.sh/resource-policy"
-    value = "keep"
-  }
+  # set {
+  #   name  = "service.annotations.helm\\.sh/resource-policy"
+  #   value = "keep"
+  # }
 }
