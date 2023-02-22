@@ -10,6 +10,6 @@ output "kubernetes_certificate" {
   value = base64decode(digitalocean_kubernetes_cluster.kubernetes.kube_config[0].cluster_ca_certificate)
 }
 
-output "loadbalancer_ip" {
-  value = digitalocean_loadbalancer.loadbalancer.ip
+output "loadbalancer_id" {
+  value = digitalocean_loadbalancer.loadbalancer.id
 }

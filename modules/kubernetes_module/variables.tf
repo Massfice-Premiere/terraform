@@ -10,6 +10,6 @@ variable "kubernetes_certificate" {
   type = string
 }
 
-variable "loadbalancer_ip" {
+variable "loadbalancer_id" {
   type = string
 }
