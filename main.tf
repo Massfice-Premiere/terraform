@@ -7,6 +7,12 @@ terraform {
   }
 }
 
+module "digital_ocean_module" {
+  source = "./modules/digitalocean_module"
+
+  token = var.digitalocean_token
+}
+
 # variable "GITHUB_TOKEN" {
 #   type = string
 # }
