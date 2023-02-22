@@ -2,11 +2,11 @@ terraform {
   required_providers {}
 }
 
-# module "digitalocean_module" {
-#   source = "./modules/digitalocean_module"
+module "digital_ocean_module" {
+  source = "./modules/digitalocean_module"
 
-#   token = var.digitalocean_token
-# }
+  token = var.digitalocean_token
+}
 
 
 # module "kubernetes_module" {
