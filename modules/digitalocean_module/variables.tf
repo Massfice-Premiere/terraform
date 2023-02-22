@@ -5,6 +5,6 @@ variable "token" {
 
 variable "cluster_name" {
   type        = string
-  default     = "Kubernetes Cluster"
+  default     = "k8s-cluster"
   description = "name of cluster"
 }
