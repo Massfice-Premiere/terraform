@@ -31,4 +31,14 @@ resource "helm_release" "nginx_ingress_chart" {
     name  = "service.annotations.kubernetes\\.digitalocean\\.com/load-balancer-id"
     value = var.loadbalancer_id
   }
+
+  set {
+    name  = "service.annotations.kubernetes\\.io/do-loadbalancer-disown"
+    value = "true"
+  }
+
+  set {
+    name  = "service.annotations.helm\\.sh/resource-policy"
+    value = "keep"
+  }
 }
