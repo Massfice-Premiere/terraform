@@ -16,5 +16,6 @@ module "kubernetes_module" {
   kubernetes_token       = module.digitalocean_module.kubernetes_config[0].token
   kubernetes_certificate = module.digitalocean_module.kubernetes_config[0].cluster_ca_certificate
   loadbalancer_id        = module.digitalocean_module.loadbalancer_id
+  letsencrypt_email      = var.letsencrypt_email
 }
 

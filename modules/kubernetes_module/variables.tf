@@ -13,3 +13,7 @@ variable "kubernetes_certificate" {
 variable "loadbalancer_id" {
   type = string
 }
+
+variable "letsencrypt_email" {
+  type = string
+}
