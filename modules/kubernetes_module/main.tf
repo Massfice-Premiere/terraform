@@ -60,7 +60,7 @@ resource "helm_release" "nginx_ingress_chart" {
   }
 
   set {
-    name  = "service.annotations.kubernetes\\.digitalocean\\.com/load-balancer-name"
+    name  = "service.annotations.service\\.beta\\.kubernetes\\.io/do-loadbalancer-name"
     value = var.loadbalancer_name
   }
 
