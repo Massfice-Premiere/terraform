@@ -68,9 +68,6 @@ resource "helm_release" "cert-manager" {
   version    = "v1.0.1"
   namespace  = "letsencrypt"
   timeout    = 120
-  depends_on = [
-    kubernetes_ingress.default_cluster_ingress,
-  ]
   set {
     name  = "createCustomResource"
     value = "true"
