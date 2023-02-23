@@ -38,12 +38,22 @@ resource "kubernetes_namespace" "letsencrypt" {
   }
 }
 
+resource "kubernetes_namespace" "argocd" {
+  metadata {
+    name = "argocd"
+  }
+}
+
 
 resource "helm_release" "nginx_ingress_chart" {
   name       = "nginx-ingress-controller"
   namespace  = "ingress"
   repository = "https://charts.bitnami.com/bitnami"
   chart      = "nginx-ingress-controller"
+
+  depends_on = [
+    kubernetes_namespace.ingress
+  ]
 
   set {
     name  = "service.type"
@@ -68,10 +78,16 @@ resource "helm_release" "cert-manager" {
   version    = "v1.0.1"
   namespace  = "letsencrypt"
   timeout    = 120
+
+  depends_on = [
+    kubernetes_namespace.letsencrypt
+  ]
+
   set {
     name  = "createCustomResource"
     value = "true"
   }
+
   set {
     name  = "installCRDs"
     value = "true"
@@ -83,11 +99,34 @@ resource "helm_release" "cluster-issuer" {
   name      = "cluster-issuer"
   chart     = "../charts/cluster-issuer"
   namespace = "letsencrypt"
+
   depends_on = [
     helm_release.cert-manager,
   ]
+
   set {
     name  = "letsencrypt_email"
     value = var.letsencrypt_email
+  }
+}
+
+resource "helm_release" "argocd" {
+  name       = "argocd"
+  repository = "https://argoproj.github.io/argo-helm"
+  chart      = "argo-cd"
+  namespace  = "argocd"
+
+  depends_on = [
+    kubernetes_namespace.argocd
+  ]
+
+  set {
+    name  = "createCustomResource"
+    value = "true"
+  }
+
+  set {
+    name  = "installCRDs"
+    value = "true"
   }
 }
