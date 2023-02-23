@@ -32,12 +32,6 @@ resource "kubernetes_namespace" "ingress" {
   }
 }
 
-resource "kubernetes_namespace" "letsencrypt" {
-  metadata {
-    name = "letsencrypt"
-  }
-}
-
 resource "kubernetes_namespace" "argocd" {
   metadata {
     name = "argocd"
@@ -66,6 +60,11 @@ resource "helm_release" "nginx_ingress_chart" {
   }
 
   set {
+    name  = "service.annotations.kubernetes\\.digitalocean\\.com/load-balancer-name"
+    value = var.loadbalancer_name
+  }
+
+  set {
     name  = "service.annotations.helm\\.sh/resource-policy"
     value = "keep"
   }
@@ -76,12 +75,8 @@ resource "helm_release" "cert-manager" {
   repository = "https://charts.jetstack.io"
   chart      = "cert-manager"
   version    = "v1.0.1"
-  namespace  = "letsencrypt"
+  namespace  = "kube-system"
   timeout    = 120
-
-  depends_on = [
-    kubernetes_namespace.letsencrypt
-  ]
 
   set {
     name  = "createCustomResource"
@@ -98,7 +93,7 @@ resource "helm_release" "cert-manager" {
 resource "helm_release" "cluster-issuer" {
   name      = "cluster-issuer"
   chart     = "./charts/cluster-issuer"
-  namespace = "letsencrypt"
+  namespace = "kube-system"
 
   depends_on = [
     helm_release.cert-manager,

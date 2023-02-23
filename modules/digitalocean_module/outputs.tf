@@ -9,3 +9,7 @@ output "kubernetes_config" {
 output "loadbalancer_id" {
   value = digitalocean_loadbalancer.loadbalancer.id
 }
+
+output "loadbalancer_name" {
+  value = digitalocean_loadbalancer.loadbalancer.name
+}

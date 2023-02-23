@@ -14,6 +14,10 @@ variable "loadbalancer_id" {
   type = string
 }
 
+variable "loadbalancer_name" {
+  type = string
+}
+
 variable "letsencrypt_email" {
   type = string
 }
