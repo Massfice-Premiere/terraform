@@ -38,6 +38,12 @@ resource "kubernetes_namespace" "argocd" {
   }
 }
 
+resource "kubernetes_namespace" "letsencrypt" {
+  metadata {
+    name = "letsencrypt"
+  }
+}
+
 
 resource "helm_release" "nginx_ingress_chart" {
   name       = "nginx-ingress-controller"
@@ -75,8 +81,12 @@ resource "helm_release" "cert-manager" {
   repository = "https://charts.jetstack.io"
   chart      = "cert-manager"
   version    = "v1.0.1"
-  namespace  = "kube-system"
+  namespace  = "letsencrypt"
   timeout    = 120
+
+  depends_on = [
+    kubernetes_namespace.letsencrypt
+  ]
 
   set {
     name  = "createCustomResource"
@@ -87,16 +97,21 @@ resource "helm_release" "cert-manager" {
     name  = "installCRDs"
     value = "true"
   }
+
+  set {
+    name  = "webhook.securePort"
+    value = 10260
+  }
 }
 
 
 resource "helm_release" "cluster-issuer" {
   name      = "cluster-issuer"
   chart     = "./charts/cluster-issuer"
-  namespace = "kube-system"
+  namespace = "letsencrypt"
 
   depends_on = [
-    helm_release.cert-manager,
+    helm_release.cert-manager
   ]
 
   set {
