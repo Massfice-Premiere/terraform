@@ -97,11 +97,6 @@ resource "helm_release" "cert-manager" {
     name  = "installCRDs"
     value = "true"
   }
-
-  set {
-    name  = "webhook.securePort"
-    value = 10260
-  }
 }
 
 
