@@ -97,7 +97,7 @@ resource "helm_release" "cert-manager" {
 
 resource "helm_release" "cluster-issuer" {
   name      = "cluster-issuer"
-  chart     = "../../charts/cluster-issuer"
+  chart     = "./charts/cluster-issuer"
   namespace = "letsencrypt"
 
   depends_on = [
