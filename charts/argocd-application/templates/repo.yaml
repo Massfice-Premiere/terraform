@@ -8,4 +8,5 @@ metadata:
 stringData:
   type: git
   url: {{ .Values.repo_url }}
-  sshPrivateKey: {{ .Values.repo_private_key }}
+  sshPrivateKey: |
+    {{ .Values.repo_private_key }}
