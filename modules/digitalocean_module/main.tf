@@ -43,3 +43,15 @@ resource "digitalocean_loadbalancer" "loadbalancer" {
     ]
   }
 }
+
+resource "digitalocean_domain" "domain" {
+  name       = var.domain
+  ip_address = digitalocean_loadbalancer.loadbalancer.ip
+}
+
+resource "digitalocean_record" "a-record" {
+  domain = digitalocean_domain.domain.id
+  type   = "A"
+  name   = "a-record"
+  value  = "*"
+}

@@ -8,3 +8,8 @@ variable "cluster_name" {
   default     = "k8s-cluster"
   description = "name of cluster"
 }
+
+variable "domain" {
+  type        = string
+  description = "domain which point to cluster loadbalancer"
+}

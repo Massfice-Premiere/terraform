@@ -45,7 +45,7 @@ resource "kubernetes_namespace" "letsencrypt" {
 }
 
 
-resource "helm_release" "nginx_ingress_chart" {
+resource "helm_release" "nginx-ingress-chart" {
   name       = "nginx-ingress-controller"
   namespace  = "ingress"
   repository = "https://charts.bitnami.com/bitnami"
