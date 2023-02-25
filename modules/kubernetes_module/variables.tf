@@ -30,5 +30,5 @@ variable "letsencrypt_email" {
 
 variable "github_private_key" {
   type        = string
-  description = "private key in pem format for connecting argocd to github repository"
+  description = "private key in openssh format for connecting argocd to github repository"
 }

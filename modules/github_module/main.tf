@@ -19,7 +19,7 @@ resource "tls_private_key" "tls-key" {
 
 resource "github_user_ssh_key" "argocd-key" {
   title = "argocd-key"
-  key   = tls_private_key.tls-key.public_key_pem
+  key   = tls_private_key.tls-key.public_key_openssh
 }
 
 resource "github_repository_webhook" "argocd-webhook" {
