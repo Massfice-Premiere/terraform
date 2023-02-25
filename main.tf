@@ -5,7 +5,8 @@ terraform {
 module "digitalocean_module" {
   source = "./modules/digitalocean_module"
 
-  token = var.digitalocean_token
+  token  = var.digitalocean_token
+  domain = var.domain
 }
 
 
