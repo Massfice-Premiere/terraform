@@ -146,6 +146,11 @@ resource "helm_release" "argocd-application" {
   ]
 
   set {
+    name  = "validate"
+    value = false
+  }
+
+  set {
     name  = "repo_url"
     value = "git@github.com:${var.github_repo_owner}/${var.github_argocd_repo}.git"
   }
