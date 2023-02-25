@@ -28,6 +28,8 @@ module "kubernetes_module" {
   loadbalancer_id        = module.digitalocean_module.loadbalancer_id
   loadbalancer_name      = module.digitalocean_module.loadbalancer_name
   github_private_key     = module.github_module.private_key
+  github_repo_owner      = var.github_owner
+  github_argocd_repo     = var.github_argo_repo
   letsencrypt_email      = var.letsencrypt_email
 }
 

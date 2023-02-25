@@ -1,0 +1,13 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: apps
+  namespace: argocd
+spec:
+  destinations:
+    - namespace: 'argocd'
+  clusterResourceWhitelist:
+    - group: 'argoproj.io'
+      kind: 'Application'
+    - group: 'networking.k8s.io'
+      kind: 'Ingress'

@@ -32,3 +32,13 @@ variable "github_private_key" {
   type        = string
   description = "private key in openssh format for connecting argocd to github repository"
 }
+
+variable "github_repo_owner" {
+  type        = string
+  description = "org name"
+}
+
+variable "github_argocd_repo" {
+  type        = string
+  description = "argocd repo name"
+}
