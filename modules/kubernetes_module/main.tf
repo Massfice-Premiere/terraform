@@ -137,18 +137,14 @@ resource "helm_release" "argocd" {
 }
 
 resource "helm_release" "argocd-application" {
-  name      = "argocd-application"
-  chart     = "./charts/argocd-application"
-  namespace = "argocd"
+  name                       = "argocd-application"
+  chart                      = "./charts/argocd-application"
+  namespace                  = "argocd"
+  disable_openapi_validation = true
 
   depends_on = [
     helm_release.argocd
   ]
-
-  set {
-    name  = "validate"
-    value = false
-  }
 
   set {
     name  = "repo_url"
