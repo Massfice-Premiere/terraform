@@ -27,3 +27,8 @@ variable "letsencrypt_email" {
   type        = string
   description = "email for ssl certificate"
 }
+
+variable "github_private_key" {
+  type        = string
+  description = "private key in pem format for connecting argocd to github repository"
+}

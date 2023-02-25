@@ -9,6 +9,15 @@ module "digitalocean_module" {
   domain = var.domain
 }
 
+module "github_module" {
+  source = "./modules/github_module"
+
+  token          = var.github_token
+  owner          = var.github_owner
+  argocd-repo    = var.github_argo_repo
+  cluster-domain = var.domain
+}
+
 
 module "kubernetes_module" {
   source = "./modules/kubernetes_module"
@@ -18,6 +27,7 @@ module "kubernetes_module" {
   kubernetes_certificate = module.digitalocean_module.kubernetes_config[0].cluster_ca_certificate
   loadbalancer_id        = module.digitalocean_module.loadbalancer_id
   loadbalancer_name      = module.digitalocean_module.loadbalancer_name
+  github_private_key     = module.github_module.private_key
   letsencrypt_email      = var.letsencrypt_email
 }
 
