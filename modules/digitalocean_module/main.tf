@@ -52,6 +52,6 @@ resource "digitalocean_domain" "domain" {
 resource "digitalocean_record" "a-record" {
   domain = digitalocean_domain.domain.id
   type   = "A"
-  name   = "a-record"
-  value  = "*"
+  name   = "*"
+  value  = digitalocean_loadbalancer.loadbalancer.ip
 }
