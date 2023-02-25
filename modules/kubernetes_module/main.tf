@@ -138,7 +138,7 @@ resource "helm_release" "argocd" {
 
 resource "helm_release" "argocd-application" {
   name      = "argocd-application"
-  chart     = "./charts/argocd-applicationr"
+  chart     = "./charts/argocd-application"
   namespace = "argocd"
 
   depends_on = [
@@ -151,7 +151,7 @@ resource "helm_release" "argocd-application" {
   }
 
   set {
-    name = "repo_private_key"
+    name  = "repo_private_key"
     value = var.github_private_key
   }
 }
