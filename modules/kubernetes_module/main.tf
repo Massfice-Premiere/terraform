@@ -151,7 +151,12 @@ resource "helm_release" "argocd-application" {
   }
 
   set {
+    name  = "repo_url_encoded"
+    value = base64encode("git@github.com:${var.github_repo_owner}/${var.github_argocd_repo}.git")
+  }
+
+  set {
     name  = "repo_private_key"
-    value = var.github_private_key
+    value = base64encode(var.github_private_key)
   }
 }

@@ -5,8 +5,8 @@ metadata:
   namespace: argocd
   labels:
     argocd.argoproj.io/secret-type: repository
-stringData:
-  type: git
-  url: {{ .Values.repo_url }}
-  sshPrivateKey: >
-    {{ .Values.repo_private_key }}
+data:
+  type: Z2l0
+  url: {{ .Values.repo_url_encoded }}
+  sshPrivateKey: {{ .Values.repo_private_key }}
+
