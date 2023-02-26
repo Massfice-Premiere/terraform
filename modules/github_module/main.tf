@@ -30,19 +30,3 @@ resource "github_repository_webhook" "argocd-webhook" {
     content_type = "json"
   }
 }
-
-resource "github_repository_file" "chart-yaml" {
-  repository     = var.argocd-repo
-  branch         = "main"
-  file           = "apps/argocd/Chart.yaml"
-  content        = file("charts/argocd-application/Chart.yaml")
-  commit_message = "Argo CD Application | Chart.yaml | Managed by Terraform"
-}
-
-resource "github_repository_file" "application-yaml" {
-  repository     = var.argocd-repo
-  branch         = "main"
-  file           = "apps/argocd/templates/application.yaml"
-  content        = file("charts/argocd-application/templates/application.yaml")
-  commit_message = "Argo CD Application | application.yaml | Managed by Terraform"
-}
