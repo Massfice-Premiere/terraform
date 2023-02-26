@@ -42,3 +42,8 @@ variable "github_argocd_repo" {
   type        = string
   description = "argocd repo name"
 }
+
+variable "domain" {
+  type        = string
+  description = "domain of cluster"
+}

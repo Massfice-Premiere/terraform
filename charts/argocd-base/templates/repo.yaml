@@ -9,4 +9,4 @@ type: Opaque
 data:
   type: Z2l0
   url: {{ .Values.repo_url_encoded }}
-  sshPrivateKey: {{ .Values.repo_private_key }}
+  sshPrivateKey: {{ .Values.repo_private_key_encoded }}

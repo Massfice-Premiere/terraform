@@ -31,5 +31,6 @@ module "kubernetes_module" {
   github_repo_owner      = var.github_owner
   github_argocd_repo     = var.github_argo_repo
   letsencrypt_email      = var.letsencrypt_email
+  domain                 = var.domain
 }
 
