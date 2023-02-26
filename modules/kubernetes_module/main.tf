@@ -140,7 +140,7 @@ resource "helm_release" "argocd" {
   }
 
   set {
-    name  = "configs.cm.secret.extra.argocdServerAdminPassword"
+    name  = "configs.secret.extra.argocdServerAdminPassword"
     value = bcrypt(var.argocd_password)
   }
 }
