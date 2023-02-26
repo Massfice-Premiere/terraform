@@ -1,0 +1,16 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ArgoCD
+metadata:
+  name: dex
+spec:
+  dex:
+    config: |
+      connectors:
+        - type: github
+          id: github
+          name: GitHub
+          config:
+            clientID: $dex-secret-github:clientID
+            clientSecret: $dex-secret-github:clientSecret
+            orgs:
+            - name: dummy-org
