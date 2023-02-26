@@ -8,6 +8,10 @@ terraform {
       source  = "hashicorp/kubernetes"
       version = ">= 2.0.0"
     }
+    kubectl = {
+      source  = "gavinbunney/kubectl"
+      version = ">= 1.7.0"
+    }
   }
 
 }
@@ -24,6 +28,13 @@ provider "kubernetes" {
   host                   = var.kubernetes_host
   token                  = var.kubernetes_token
   cluster_ca_certificate = base64decode(var.kubernetes_certificate)
+}
+
+provider "kubectl" {
+  host                   = var.kubernetes_host
+  token                  = var.kubernetes_token
+  cluster_ca_certificate = base64decode(var.kubernetes_certificate)
+  load_config_file       = false
 }
 
 resource "kubernetes_namespace" "ingress" {
@@ -136,38 +147,67 @@ resource "helm_release" "argocd" {
   }
 }
 
-# resource "helm_release" "argocd-application" {
-#   name                       = "argocd-application"
-#   chart                      = "./charts/argocd-application"
-#   namespace                  = "argocd"
-#   disable_openapi_validation = true
+resource "helm_release" "argocd-base" {
+  name                       = "argocd-base"
+  chart                      = "./charts/argocd-base"
+  namespace                  = "argocd"
+  disable_openapi_validation = true
 
-#   depends_on = [
-#     helm_release.argocd
-#   ]
+  depends_on = [
+    helm_release.argocd
+  ]
 
-#   set {
-#     name  = "createCustomResource"
-#     value = "true"
-#   }
+  set {
+    name  = "createCustomResource"
+    value = "true"
+  }
 
-#   set {
-#     name  = "installCRDs"
-#     value = "true"
-#   }
+  set {
+    name  = "installCRDs"
+    value = "true"
+  }
 
-#   set {
-#     name  = "repo_url"
-#     value = "git@github.com:${var.github_repo_owner}/${var.github_argocd_repo}.git"
-#   }
+  set {
+    name  = "repo_url"
+    value = "git@github.com:${var.github_repo_owner}/${var.github_argocd_repo}.git"
+  }
 
-#   set {
-#     name  = "repo_url_encoded"
-#     value = base64encode("git@github.com:${var.github_repo_owner}/${var.github_argocd_repo}.git")
-#   }
+  set {
+    name  = "repo_url_encoded"
+    value = base64encode("git@github.com:${var.github_repo_owner}/${var.github_argocd_repo}.git")
+  }
 
-#   set {
-#     name  = "repo_private_key"
-#     value = base64encode(var.github_private_key)
-#   }
-# }
+  set {
+    name  = "repo_private_key"
+    value = base64encode(var.github_private_key)
+  }
+}
+
+resource "kubectl_manifest" "argocd-application" {
+  yaml_body = <<EOF
+  apiVersion: argoproj.io/v1alpha1
+  kind: Application
+  metadata:
+    name: argocd-application
+    metadata: argocd
+  spec:
+    project: apps
+    source:
+      repoURL: git@github.com:${var.github_repo_owner}/${var.github_argocd_repo}.git
+      targetRevision: HEAD
+      path: apps/argocd
+    destination:
+      server: https://kubernetes.default.svc
+      namespace: argocd
+    syncPolicy:
+      syncOptions:
+        - CreateNamespace=true
+      automated:
+        selfHeal: true
+        prune: true
+  EOF
+
+  depends_on = [
+    helm_release.argocd-base
+  ]
+}
