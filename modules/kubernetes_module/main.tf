@@ -46,16 +46,18 @@ resource "kubernetes_namespace" "letsencrypt" {
 
 resource "kubernetes_secret" "dex-secret" {
   metadata {
-    name      = "dex-secret"
+    name      = "dex-secret-github"
     namespace = "argocd"
+    labels = {
+      "app.kubernetes.io/component" = "server"
+      "app.kubernetes.io/instance"  = "argocd"
+      "app.kubernetes.io/name"      = "dex-secret-github"
+      "app.kubernetes.io/part-of"   = "argocd"
+    }
   }
-
   data = {
-    dex = jsonencode({
-      github = {
-        clientSecret = var.github_oauth_app_client_secret
-      }
-    })
+    clientID : var.github_oauth_app_client_id
+    clientSecret : var.github_oauth_app_client_secret
   }
 
   depends_on = [
@@ -169,8 +171,8 @@ resource "helm_release" "argocd" {
             }
           ]
           config = {
-            clientID     = var.github_oauth_app_client_id
-            clientSecret = "$dex-secret:dex.github.clientSecret"
+            clientID     = "$dex-secret-github:clientID"
+            clientSecret = "$dex-secret-github:clientSecret"
           }
         }
       ]
