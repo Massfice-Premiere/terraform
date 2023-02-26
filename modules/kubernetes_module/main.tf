@@ -163,6 +163,21 @@ resource "helm_release" "argocd" {
   }
 
   set {
+    name  = "configs.cm.dex\\.enabled"
+    value = false
+  }
+
+  set {
+    name  = "url"
+    value = "https://${var.domain}"
+  }
+
+  set {
+    name  = "redirectURL"
+    value = "https://${var.domain}/api/dex/callback"
+  }
+
+  set {
     name = "configs.cm.dex\\.config"
     value = trimspace(<<EOD
     connectors:
