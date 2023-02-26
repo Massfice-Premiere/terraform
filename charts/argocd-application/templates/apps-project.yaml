@@ -4,6 +4,8 @@ metadata:
   name: apps
   namespace: argocd
 spec:
+  sourceRepos:
+    - {{ .Values.repo_url }}
   destinations:
     - namespace: 'argocd'
       server: '*'
