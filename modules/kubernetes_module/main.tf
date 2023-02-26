@@ -157,7 +157,7 @@ resource "helm_release" "argocd" {
 
   set {
     name = "configs.cm.dex\\.config.connectors"
-    value = [
+    value = jsonencode([
       {
         type = "github"
         id   = "github"
@@ -168,7 +168,7 @@ resource "helm_release" "argocd" {
           orgs         = [var.github_repo_owner]
         }
       }
-    ]
+    ])
   }
 }
 
