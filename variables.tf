@@ -28,13 +28,7 @@ variable "github_argo_repo" {
   description = "name of argocd repository"
 }
 
-variable "github_oauth_app_client_id" {
+variable "argocd_password" {
   type        = string
-  description = "client id of github oauth app"
+  description = "admin password for argocd"
 }
-
-variable "github_oauth_app_client_secret" {
-  type        = string
-  description = "client secret of github oauth app"
-}
-

@@ -48,12 +48,7 @@ variable "domain" {
   description = "domain of cluster"
 }
 
-variable "github_oauth_app_client_id" {
+variable "argocd_password" {
   type        = string
-  description = "client id of github oauth app"
-}
-
-variable "github_oauth_app_client_secret" {
-  type        = string
-  description = "client secret of github oauth app"
+  description = "admin password for argocd"
 }

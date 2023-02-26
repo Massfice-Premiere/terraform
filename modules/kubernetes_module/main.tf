@@ -44,28 +44,6 @@ resource "kubernetes_namespace" "letsencrypt" {
   }
 }
 
-resource "kubernetes_secret" "dex-secret" {
-  metadata {
-    name      = "dex-secret-github"
-    namespace = "argocd"
-    labels = {
-      "app.kubernetes.io/component" = "server"
-      "app.kubernetes.io/instance"  = "argocd"
-      "app.kubernetes.io/name"      = "dex-secret-github"
-      "app.kubernetes.io/part-of"   = "argocd"
-    }
-  }
-  data = {
-    clientID : var.github_oauth_app_client_id
-    clientSecret : var.github_oauth_app_client_secret
-  }
-
-  depends_on = [
-    kubernetes_namespace.argocd
-  ]
-}
-
-
 resource "helm_release" "nginx-ingress-chart" {
   name       = "nginx-ingress-controller"
   namespace  = "ingress"
@@ -143,8 +121,7 @@ resource "helm_release" "argocd" {
   namespace  = "argocd"
 
   depends_on = [
-    kubernetes_namespace.argocd,
-    kubernetes_secret.dex-secret
+    kubernetes_namespace.argocd
   ]
 
   set {
@@ -159,27 +136,12 @@ resource "helm_release" "argocd" {
 
   set {
     name  = "configs.cm.admin\\.enabled"
-    value = false
+    value = "true"
   }
 
   set {
-    name  = "configs.cm.dex\\.enabled"
-    value = true
-  }
-
-  set {
-    name  = "configs.cm.url"
-    value = "https://argocd.${var.domain}"
-  }
-
-  set {
-    name  = "configs.cm.redirectURL"
-    value = "https://argocd.${var.domain}/api/dex/callback"
-  }
-
-  set {
-    name  = "configs.cm.oidc\\.config"
-    value = "name: Auth0\nissuer: https://dev-9gntu7bd.eu.auth0.com\nclientID: Z2drSVKyo4L2w7h0k28G2RVQl6iHJopZ\nclientSecret: jsDNFtMMl83hecvmCuop22LTB7hProww2BYzS_eiU76j0ViWKX0lV9DIzaJRnUhr\nrequestedScopes:\n- openid\n- profile\n- email"
+    name  = "configs.cm.secret.extra.argocdServerAdminPassword"
+    value = var.argocd_password
   }
 }
 
