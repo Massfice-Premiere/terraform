@@ -164,7 +164,7 @@ resource "helm_release" "argocd" {
         name = "Github"
         config = {
           clientID     = var.github_oauth_app_client_id
-          clientSecret = "$dex-secret:dex.github.clientSecret"
+          clientSecret = "$$dex-secret:dex.github.clientSecret"
           orgs         = [var.github_repo_owner]
         }
       }
