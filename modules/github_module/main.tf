@@ -46,7 +46,9 @@ resource "github_repository_file" "application-yaml" {
     source:
       repoURL: git@github.com:${var.owner}/${var.argocd-repo}.git
       targetRevision: HEAD
-      path: apps
+      path: apps/
+      directory:
+        recursive: true
     destination:
       server: https://kubernetes.default.svc
       namespace: argocd

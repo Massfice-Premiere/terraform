@@ -195,7 +195,9 @@ resource "kubectl_manifest" "argocd-application" {
     source:
       repoURL: git@github.com:${var.github_repo_owner}/${var.github_argocd_repo}.git
       targetRevision: HEAD
-      path: apps
+      path: apps/
+      directory:
+        recursive: true
     destination:
       server: https://kubernetes.default.svc
       namespace: argocd
