@@ -31,10 +31,10 @@ resource "github_repository_webhook" "argocd-webhook" {
   }
 }
 
-resource "github_repository_file" "application-yaml" {
+resource "github_repository_file" "argocd-application-yaml" {
   repository     = var.argocd-repo
   branch         = "main"
-  file           = "apps/argocd/application.yaml"
+  file           = "apps/argocd-application.yaml"
   content        = <<EOF
   apiVersion: argoproj.io/v1alpha1
   kind: Application
@@ -46,9 +46,7 @@ resource "github_repository_file" "application-yaml" {
     source:
       repoURL: git@github.com:${var.owner}/${var.argocd-repo}.git
       targetRevision: HEAD
-      path: apps/
-      directory:
-        recursive: true
+      path: apps
     destination:
       server: https://kubernetes.default.svc
       namespace: argocd
@@ -63,10 +61,10 @@ resource "github_repository_file" "application-yaml" {
   commit_message = "Argo CD Application | application.yaml"
 }
 
-resource "github_repository_file" "ingress-yaml" {
+resource "github_repository_file" "argocd-ingress-yaml" {
   repository     = var.argocd-repo
   branch         = "main"
-  file           = "apps/argocd/ingress.yaml"
+  file           = "apps/argocd-ingress.yaml"
   content        = <<EOF
   apiVersion: networking.k8s.io/v1
   kind: Ingress
