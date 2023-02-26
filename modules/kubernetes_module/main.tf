@@ -44,6 +44,25 @@ resource "kubernetes_namespace" "letsencrypt" {
   }
 }
 
+resource "kubernetes_secret" "dex-secret" {
+  metadata {
+    name      = "dex-secret"
+    namespace = "argocd"
+  }
+
+  data = {
+    dex = {
+      github = {
+        clientSecret = var.github_oauth_app_client_secret
+      }
+    }
+  }
+
+  depends_on = [
+    kubernetes_namespace.argocd
+  ]
+}
+
 
 resource "helm_release" "nginx-ingress-chart" {
   name       = "nginx-ingress-controller"
@@ -122,7 +141,8 @@ resource "helm_release" "argocd" {
   namespace  = "argocd"
 
   depends_on = [
-    kubernetes_namespace.argocd
+    kubernetes_namespace.argocd,
+    kubernetes_secret.dex-secret
   ]
 
   set {
@@ -133,6 +153,22 @@ resource "helm_release" "argocd" {
   set {
     name  = "installCRDs"
     value = "true"
+  }
+
+  set {
+    name = "configs.cm.dex\\.config.connectors"
+    value = [
+      {
+        type = "github"
+        id   = "github"
+        name = "Github"
+        config = {
+          clientID     = var.github_oauth_app_client_id
+          clientSecret = "$dex-secret:dex.github.clientSecret"
+          orgs         = [var.github_repo_owner]
+        }
+      }
+    ]
   }
 }
 

@@ -47,3 +47,13 @@ variable "domain" {
   type        = string
   description = "domain of cluster"
 }
+
+variable "github_oauth_app_client_id" {
+  type        = string
+  description = "client id of github oauth app"
+}
+
+variable "github_oauth_app_client_secret" {
+  type        = string
+  description = "client secret of github oauth app"
+}
