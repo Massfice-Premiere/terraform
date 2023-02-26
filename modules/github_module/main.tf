@@ -87,10 +87,10 @@ resource "github_repository_file" "ingress-yaml" {
                   name: argocd-server
                   port:
                     name: https
-  tls:
-    - hosts:
-        - argocd.${var.cluster-domain}
-      secretName: argocd-tls
+    tls:
+      - hosts:
+          - argocd.${var.cluster-domain}
+        secretName: argocd-tls
   EOF
   commit_message = "Argo CD Application | ingress.yaml"
 }
