@@ -58,6 +58,7 @@ resource "github_repository_file" "application-yaml" {
       automated:
         selfHeal: true
         prune: true
+        allowEmpty: true
   EOF
   commit_message = "Argo CD Application | application.yaml"
 }

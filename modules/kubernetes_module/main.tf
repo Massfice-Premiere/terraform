@@ -207,6 +207,7 @@ resource "kubectl_manifest" "argocd-application" {
       automated:
         selfHeal: true
         prune: true
+        allowEmpty: true
   EOF
 
   depends_on = [
