@@ -51,11 +51,11 @@ resource "kubernetes_secret" "dex-secret" {
   }
 
   data = {
-    dex = {
+    dex = jsonencode({
       github = {
         clientSecret = var.github_oauth_app_client_secret
       }
-    }
+    })
   }
 
   depends_on = [
