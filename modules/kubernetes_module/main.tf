@@ -169,12 +169,12 @@ resource "helm_release" "argocd" {
 
   set {
     name  = "configs.cm.url"
-    value = "https://${var.domain}"
+    value = "https://argocd.${var.domain}"
   }
 
   set {
     name  = "configs.cm.redirectURL"
-    value = "https://${var.domain}/api/dex/callback"
+    value = "https://argocd.${var.domain}/api/dex/callback"
   }
 
   set {
