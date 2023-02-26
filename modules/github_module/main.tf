@@ -44,7 +44,7 @@ resource "github_repository_file" "application-yaml" {
   spec:
     project: apps
     source:
-      repoURL: git@github.com:${var.owner}/${var.argo-repo}.git
+      repoURL: git@github.com:${var.owner}/${var.argocd-repo}.git
       targetRevision: HEAD
       path: apps/argocd
     destination:
