@@ -8,7 +8,7 @@ spec:
     - {{ .Values.repo_url }}
   destinations:
     - namespace: 'argocd'
-      server: '*'
+      server: 'https://kubernetes.default.svc'
   clusterResourceWhitelist:
     - group: 'argoproj.io'
       kind: 'Application'
