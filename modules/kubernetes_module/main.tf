@@ -156,6 +156,26 @@ resource "helm_release" "argocd" {
     name  = "installCRDs"
     value = "true"
   }
+
+  set {
+    name  = "configs.cm.admin\\.enabled"
+    value = false
+  }
+
+  set {
+    name  = "configs.cm.dex\\.config"
+    value = <<EOD
+      connectors:
+		    - type: github
+		      id: github
+		      name: GitHub
+		      config:
+		        clientID: $dex-secret-github:clientID
+		        clientSecret: $dex-secret-github:clientID
+		        orgs:
+		          - name: ${var.github_repo_owner}
+		EOD
+  }
 }
 
 resource "helm_release" "argocd-base" {
