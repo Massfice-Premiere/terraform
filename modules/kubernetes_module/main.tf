@@ -171,7 +171,7 @@ resource "helm_release" "argocd" {
 		      name: GitHub
 		      config:
 		        clientID: $dex-secret-github:clientID
-		        clientSecret: $dex-secret-github:clientID
+		        clientSecret: $dex-secret-github:clientSecret
 		        orgs:
 		          - name: ${var.github_repo_owner}
 		EOD
