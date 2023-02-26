@@ -166,14 +166,14 @@ resource "helm_release" "argocd" {
     name = "configs.cm.dex\\.config"
     value = trimspace(<<EOD
     connectors:
-		 - type: github
-		   id: github
-		   name: GitHub
-		   config:
-		      clientID: $dex-secret-github:clientID
-		      clientSecret: $dex-secret-github:clientSecret
-		   orgs:
-	        - name: ${var.github_repo_owner}
+      - type: github
+        id: github
+        name: GitHub
+        config:
+          clientID: $dex-secret-github:clientID
+          clientSecret: $dex-secret-github:clientSecret
+        orgs:
+          - name: ${var.github_repo_owner}
 		EOD
     )
   }
