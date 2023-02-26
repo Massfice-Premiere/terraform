@@ -178,18 +178,8 @@ resource "helm_release" "argocd" {
   }
 
   set {
-    name = "configs.cm.oidc\\.config"
-    value = trimspace(<<EOD
-    name: Auth0
-    issuer: https://dev-9gntu7bd.eu.auth0.com
-    clientID: Z2drSVKyo4L2w7h0k28G2RVQl6iHJopZ
-    clientSecret: jsDNFtMMl83hecvmCuop22LTB7hProww2BYzS_eiU76j0ViWKX0lV9DIzaJRnUhr
-    requestedScopes:
-    - openid
-    - profile
-    - email
-		EOD
-    )
+    name  = "configs.cm.oidc\\.config"
+    value = "name: Auth0\nissuer: https://dev-9gntu7bd.eu.auth0.com\nclientID: Z2drSVKyo4L2w7h0k28G2RVQl6iHJopZ\nclientSecret: jsDNFtMMl83hecvmCuop22LTB7hProww2BYzS_eiU76j0ViWKX0lV9DIzaJRnUhr\nrequestedScopes:\n- openid\n- profile\n- email"
   }
 }
 
