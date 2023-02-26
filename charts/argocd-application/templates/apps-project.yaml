@@ -6,6 +6,7 @@ metadata:
 spec:
   destinations:
     - namespace: 'argocd'
+      server: '*'
   clusterResourceWhitelist:
     - group: 'argoproj.io'
       kind: 'Application'
