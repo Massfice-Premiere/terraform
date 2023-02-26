@@ -189,7 +189,7 @@ resource "kubectl_manifest" "argocd-application" {
   kind: Application
   metadata:
     name: argocd-application
-    metadata: argocd
+    namespace: argocd
   spec:
     project: apps
     source:

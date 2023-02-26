@@ -40,7 +40,7 @@ resource "github_repository_file" "application-yaml" {
   kind: Application
   metadata:
     name: argocd-application
-    metadata: argocd
+    namespace: argocd
   spec:
     project: apps
     source:
