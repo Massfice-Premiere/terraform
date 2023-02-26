@@ -168,12 +168,12 @@ resource "helm_release" "argocd" {
   }
 
   set {
-    name  = "url"
+    name  = "configs.cm.url"
     value = "https://${var.domain}"
   }
 
   set {
-    name  = "redirectURL"
+    name  = "configs.cm.redirectURL"
     value = "https://${var.domain}/api/dex/callback"
   }
 
