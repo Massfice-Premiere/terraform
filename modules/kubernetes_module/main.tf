@@ -165,15 +165,15 @@ resource "helm_release" "argocd" {
   set {
     name  = "configs.cm.dex\\.config"
     value = <<EOD
-      connectors:
-		    - type: github
-		      id: github
-		      name: GitHub
-		      config:
-		        clientID: $dex-secret-github:clientID
-		        clientSecret: $dex-secret-github:clientSecret
-		        orgs:
-		          - name: ${var.github_repo_owner}
+    connectors:
+		  - type: github
+		    id: github
+		    name: GitHub
+		    config:
+		      clientID: $dex-secret-github:clientID
+		      clientSecret: $dex-secret-github:clientSecret
+		      orgs:
+		        - name: ${var.github_repo_owner}
 		EOD
   }
 }

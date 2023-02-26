@@ -1,0 +1,19 @@
+{
+	"admin.enabled": "false",
+	"application.instanceLabelKey": "argocd.argoproj.io/instance",
+	"dex.config": "connectors:
+		  - type: github
+		    id: github
+		    name: GitHub
+		    config:
+		      clientID: $dex-secret-github:clientID
+		      clientSecret: $dex-secret-github:clientID
+		      orgs:
+		        - name: xxxx
+		",
+	"exec.enabled": "false",
+	"server.rbac.log.enforce.enable": "false",
+	"timeout.hard.reconciliation": "0s",
+	"timeout.reconciliation": "180s",
+	"url": ""
+}
