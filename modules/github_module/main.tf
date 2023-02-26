@@ -59,3 +59,39 @@ resource "github_repository_file" "application-yaml" {
   EOF
   commit_message = "Argo CD Application | application.yaml"
 }
+
+resource "github_repository_file" "ingress-yaml" {
+  repository     = var.argocd-repo
+  branch         = "main"
+  file           = "apps/argocd/ingress.yaml"
+  content        = <<EOF
+  apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    name: ingress
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-production
+      kubernetes.io/tls-acme: "true"
+      nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+      kubernetes.io/ingress.class: nginx
+  spec:
+    rules:
+      - host: argocd.${var.cluster-domain}
+        http:
+          paths:
+            - path: /
+              pathType: Prefix
+              backend:
+                service:
+                  name: argocd-server
+                  port:
+                    name: https
+  tls:
+    - hosts:
+        - argocd.${var.cluster-domain}
+      secretName: argocd-tls
+  EOF
+  commit_message = "Argo CD Application | ingress.yaml"
+}
+
