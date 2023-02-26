@@ -1,4 +1,4 @@
 name: argocd-application
 description: ArgoCDApplication
-version: 0.2.1
+version: 0.3.1
 kubeVersion: ">=1.10.0"
