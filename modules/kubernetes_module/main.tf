@@ -147,6 +147,16 @@ resource "helm_release" "argocd-application" {
   ]
 
   set {
+    name  = "createCustomResource"
+    value = "true"
+  }
+
+  set {
+    name  = "installCRDs"
+    value = "true"
+  }
+
+  set {
     name  = "repo_url"
     value = "git@github.com:${var.github_repo_owner}/${var.github_argocd_repo}.git"
   }
