@@ -164,7 +164,7 @@ resource "helm_release" "argocd" {
 
   set {
     name  = "configs.cm.dex\\.enabled"
-    value = false
+    value = true
   }
 
   set {
