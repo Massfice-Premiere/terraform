@@ -156,19 +156,19 @@ resource "helm_release" "argocd" {
   }
 
   set {
-    name = "configs.cm.dex\\.config.connectors"
-    value = jsonencode([
-      {
-        type = "github"
-        id   = "github"
-        name = "Github"
-        config = {
-          clientID     = var.github_oauth_app_client_id
-          clientSecret = "$$dex-secret:dex.github.clientSecret"
-          orgs         = [var.github_repo_owner]
-        }
-      }
-    ])
+    name  = "configs.cm.dex\\.config"
+    value = <<EOD
+    |
+      connectors:
+        - type: github
+          id: github
+          name: Github
+          config:
+            clientID: ${var.github_oauth_app_client_id}
+            clientSecret: $dex-secret:dex.github.clientSecret
+          orgs:
+            - name: ${var.github_repo_owner}
+    EOD
   }
 }
 
