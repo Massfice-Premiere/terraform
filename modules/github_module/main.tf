@@ -46,11 +46,3 @@ resource "github_repository_file" "application-yaml" {
   content        = file("charts/argocd-application/templates/application.yaml")
   commit_message = "Argo CD Application | application.yaml | Managed by Terraform"
 }
-
-resource "github_repository_file" "values-yaml" {
-  repository     = var.argocd-repo
-  branch         = "main"
-  file           = "apps/argocd/templates/values.yaml"
-  content        = "repo_url: git@github.com:${var.owner}/${var.argocd-repo}.git\n"
-  commit_message = "Argo CD Application | values.yaml | Managed by Terraform"
-}

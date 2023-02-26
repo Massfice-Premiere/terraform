@@ -13,6 +13,7 @@ spec:
       values: |
         installCRDs: true
         createCustomResource: true
+        repo_url: {{ .Values.repo_url }}
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
