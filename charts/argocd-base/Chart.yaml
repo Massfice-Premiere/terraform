@@ -1,4 +1,4 @@
 name: argocd-base
 description: ArgoCDBase
-version: 0.6.0
+version: 0.7.0
 kubeVersion: ">=1.10.0"
