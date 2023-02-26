@@ -136,38 +136,38 @@ resource "helm_release" "argocd" {
   }
 }
 
-resource "helm_release" "argocd-application" {
-  name                       = "argocd-application"
-  chart                      = "./charts/argocd-application"
-  namespace                  = "argocd"
-  disable_openapi_validation = true
+# resource "helm_release" "argocd-application" {
+#   name                       = "argocd-application"
+#   chart                      = "./charts/argocd-application"
+#   namespace                  = "argocd"
+#   disable_openapi_validation = true
 
-  depends_on = [
-    helm_release.argocd
-  ]
+#   depends_on = [
+#     helm_release.argocd
+#   ]
 
-  set {
-    name  = "createCustomResource"
-    value = "true"
-  }
+#   set {
+#     name  = "createCustomResource"
+#     value = "true"
+#   }
 
-  set {
-    name  = "installCRDs"
-    value = "true"
-  }
+#   set {
+#     name  = "installCRDs"
+#     value = "true"
+#   }
 
-  set {
-    name  = "repo_url"
-    value = "git@github.com:${var.github_repo_owner}/${var.github_argocd_repo}.git"
-  }
+#   set {
+#     name  = "repo_url"
+#     value = "git@github.com:${var.github_repo_owner}/${var.github_argocd_repo}.git"
+#   }
 
-  set {
-    name  = "repo_url_encoded"
-    value = base64encode("git@github.com:${var.github_repo_owner}/${var.github_argocd_repo}.git")
-  }
+#   set {
+#     name  = "repo_url_encoded"
+#     value = base64encode("git@github.com:${var.github_repo_owner}/${var.github_argocd_repo}.git")
+#   }
 
-  set {
-    name  = "repo_private_key"
-    value = base64encode(var.github_private_key)
-  }
-}
+#   set {
+#     name  = "repo_private_key"
+#     value = base64encode(var.github_private_key)
+#   }
+# }
