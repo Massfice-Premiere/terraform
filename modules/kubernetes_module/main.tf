@@ -178,18 +178,16 @@ resource "helm_release" "argocd" {
   }
 
   set {
-    name = "configs.cm.dex\\.config"
+    name = "configs.cm.oidc\\.config"
     value = trimspace(<<EOD
-    connectors:
-      - type: github
-        id: github
-        name: GitHub
-        config:
-          hostName: github.com
-          clientID: $dex-secret-github:clientID
-          clientSecret: $dex-secret-github:clientSecret
-        orgs:
-          - name: ${var.github_repo_owner}
+    name: Auth0
+    issuer: https://dev-9gntu7bd.eu.auth0.com
+    clientID: Z2drSVKyo4L2w7h0k28G2RVQl6iHJopZ
+    clientSecret: jsDNFtMMl83hecvmCuop22LTB7hProww2BYzS_eiU76j0ViWKX0lV9DIzaJRnUhr
+    requestedScopes:
+    - openid
+    - profile
+    - email
 		EOD
     )
   }
