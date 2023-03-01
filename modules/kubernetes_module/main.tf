@@ -156,8 +156,8 @@ resource "helm_release" "argocd" {
   }
 }
 
-resource "time_sleep" "wait-for-3-mins-for-argocd-cleanup" {
-  destroy_duration = "3m"
+resource "time_sleep" "wait-for-5-mins-for-argocd-cleanup" {
+  destroy_duration = "5m"
 
   depends_on = [
     helm_release.argocd
@@ -171,7 +171,7 @@ resource "helm_release" "argocd-base" {
   disable_openapi_validation = true
 
   depends_on = [
-    helm_release.argocd
+    time_sleep.wait-for-5-mins-for-argocd-cleanup
   ]
 
   set {
