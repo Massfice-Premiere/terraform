@@ -37,6 +37,11 @@ data "github_repository_file" "init-template-yaml" {
   branch     = "main"
 }
 
+resource "local_file" "init-template-yaml" {
+  filename = "init.template.yaml"
+  content  = data.github_repository_file.init-template-yaml.content
+}
+
 data "template_file" "init-yaml" {
   template = data.github_repository_file.init-template-yaml.content
   vars = {
