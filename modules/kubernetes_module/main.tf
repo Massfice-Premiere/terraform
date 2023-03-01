@@ -156,14 +156,6 @@ resource "helm_release" "argocd" {
   }
 }
 
-resource "time_sleep" "wait-for-5-mins-for-argocd-cleanup" {
-  destroy_duration = "5m"
-
-  depends_on = [
-    helm_release.argocd
-  ]
-}
-
 resource "helm_release" "argocd-base" {
   name                       = "argocd-base"
   chart                      = "./charts/argocd-base"
@@ -171,7 +163,7 @@ resource "helm_release" "argocd-base" {
   disable_openapi_validation = true
 
   depends_on = [
-    time_sleep.wait-for-5-mins-for-argocd-cleanup
+    helm_release.argocd
   ]
 
   set {
@@ -209,11 +201,19 @@ resource "kubectl_manifest" "projects" {
   ]
 }
 
+resource "time_sleep" "wait-for-5-mins-for-argocd-cleanup" {
+  destroy_duration = "5m"
+
+  depends_on = [
+    kubectl_manifest.projects
+  ]
+}
+
 resource "kubectl_manifest" "init" {
   for_each  = toset(split("\n---\n", var.init-yaml))
   yaml_body = each.key
 
   depends_on = [
-    kubectl_manifest.projects
+    time_sleep.wait-for-5-mins-for-argocd-cleanup
   ]
 }
