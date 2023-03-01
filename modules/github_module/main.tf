@@ -4,6 +4,9 @@ terraform {
       source  = "integrations/github"
       version = "~> 5.0"
     }
+    local = {
+      version = "~> 2.1"
+    }
   }
 }
 
