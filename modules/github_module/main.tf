@@ -37,12 +37,67 @@ data "github_repository_file" "init-template-yaml" {
   branch     = "main"
 }
 
+# data "github_repository_file" "apps-project-template-yaml" {
+#   repository = var.argocd-repo
+#   file       = "templates/apps-project.template.yaml"
+#   branch     = "main"
+# }
+
+# data "github_repository_file" "default-project-template-yaml" {
+#   repository = var.argocd-repo
+#   file       = "templates/default-project.template.yaml"
+#   branch     = "main"
+# }
+
+# data "github_repository_file" "init-app-template-yaml" {
+#   repository = var.argocd-repo
+#   file       = "templates/init-app.template.yaml"
+#   branch     = "main"
+# }
+
+# data "github_repository_file" "standard-apps-appset-template-yaml" {
+#   repository = var.argocd-repo
+#   file       = "templates/standard-apps-appset.template.yaml"
+#   branch     = "main"
+# }
+
 data "template_file" "init-yaml" {
   template = data.github_repository_file.init-template-yaml.content
   vars = {
     REPO_URL = "git@github.com:${var.owner}/${var.argocd-repo}.git"
   }
 }
+
+# data "template_file" "apps-project-template-yaml" {
+#   template = data.github_repository_file.init-template-yaml.content
+#   vars = {
+#     REPO_URL = "git@github.com:${var.owner}/${var.argocd-repo}.git"
+#   }
+# }
+
+
+# data "template_file" "default-project-template-yaml" {
+#   template = data.github_repository_file.init-template-yaml.content
+#   vars = {
+#     REPO_URL = "git@github.com:${var.owner}/${var.argocd-repo}.git"
+#   }
+# }
+
+
+# data "template_file" "init-app-template-yaml" {
+#   template = data.github_repository_file.init-template-yaml.content
+#   vars = {
+#     REPO_URL = "git@github.com:${var.owner}/${var.argocd-repo}.git"
+#   }
+# }
+
+
+# data "template_file" "standard-apps-appset-template-yaml" {
+#   template = data.github_repository_file.init-template-yaml.content
+#   vars = {
+#     REPO_URL = "git@github.com:${var.owner}/${var.argocd-repo}.git"
+#   }
+# }
 
 resource "github_repository_file" "init-yaml" {
   repository     = var.argocd-repo
