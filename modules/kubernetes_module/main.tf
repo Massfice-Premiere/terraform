@@ -125,6 +125,10 @@ resource "helm_release" "cluster-issuer" {
   }
 }
 
+resource "time_sleep" "wait-for-3-mins" {
+  create_duration = "3m"
+}
+
 resource "helm_release" "argocd" {
   name       = "argocd"
   repository = "https://argoproj.github.io/argo-helm"
@@ -132,7 +136,8 @@ resource "helm_release" "argocd" {
   namespace  = "argocd"
 
   depends_on = [
-    kubernetes_namespace.argocd
+    kubernetes_namespace.argocd,
+    time_sleep.wait-for-3-mins
   ]
 
   set {
@@ -156,10 +161,6 @@ resource "helm_release" "argocd" {
   }
 }
 
-resource "time_sleep" "wait-for-3-mins" {
-  create_duration = "3m"
-}
-
 resource "helm_release" "argocd-base" {
   name                       = "argocd-base"
   chart                      = "./charts/argocd-base"
@@ -167,8 +168,7 @@ resource "helm_release" "argocd-base" {
   disable_openapi_validation = true
 
   depends_on = [
-    helm_release.argocd,
-    time_sleep.wait-for-3-mins
+    helm_release.argocd
   ]
 
   set {
