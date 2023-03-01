@@ -126,7 +126,7 @@ resource "helm_release" "cluster-issuer" {
 }
 
 resource "time_sleep" "wait-for-3-mins" {
-  create_duration = "3m"
+  dessdestroy_duration = "3m"
 }
 
 resource "helm_release" "argocd" {
