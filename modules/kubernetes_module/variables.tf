@@ -58,3 +58,8 @@ variable "init-yaml" {
   type        = string
   description = "rendered init.yaml"
 }
+
+variable "projects-yaml" {
+  type        = string
+  description = "projects.yaml"
+}

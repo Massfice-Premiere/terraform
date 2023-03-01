@@ -31,6 +31,12 @@ resource "github_repository_webhook" "argocd-webhook" {
   }
 }
 
+data "github_repository_file" "projects-yaml" {
+  repository = var.argocd-repo
+  file       = "apps/init/projects.yaml"
+  branch     = "main"
+}
+
 data "github_repository_file" "init-template-yaml" {
   repository = var.argocd-repo
   file       = "templates/init.template.yaml"
@@ -44,10 +50,10 @@ data "template_file" "init-yaml" {
   }
 }
 
-# resource "github_repository_file" "init-yaml" {
-#   repository     = var.argocd-repo
-#   branch         = "main"
-#   file           = "apps/init/init.yaml"
-#   commit_message = "Terraform > init.yaml"
-#   content        = data.template_file.init-yaml.rendered
-# }
+resource "github_repository_file" "init-yaml" {
+  repository     = var.argocd-repo
+  branch         = "main"
+  file           = "apps/init/init.yaml"
+  commit_message = "Terraform > init.yaml"
+  content        = data.template_file.init-yaml.rendered
+}

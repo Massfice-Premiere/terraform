@@ -7,3 +7,8 @@ output "init-yaml" {
   value       = data.template_file.init-yaml.rendered
   description = "rendered init.yaml"
 }
+
+output "projects-yaml" {
+  value       = data.github_repository_file.projects-yaml.content
+  description = "projects.yaml"
+}

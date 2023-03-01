@@ -192,11 +192,20 @@ resource "helm_release" "argocd-base" {
   }
 }
 
-# resource "kubectl_manifest" "init-yaml" {
-#   for_each  = toset(split("\n---\n", var.init-yaml))
-#   yaml_body = each.key
+resource "kubectl_manifest" "projects" {
+  for_each  = toset(split("\n---\n", var.projects-yaml))
+  yaml_body = each.key
 
-#   depends_on = [
-#     helm_release.argocd-base
-#   ]
-# }
+  depends_on = [
+    helm_release.argocd-base
+  ]
+}
+
+resource "kubectl_manifest" "init" {
+  for_each  = toset(split("\n---\n", var.init-yaml))
+  yaml_body = each.key
+
+  depends_on = [
+    kubectl_manifest.projects
+  ]
+}
