@@ -125,10 +125,6 @@ resource "helm_release" "cluster-issuer" {
   }
 }
 
-resource "time_sleep" "wait-for-3-mins" {
-  destroy_duration = "3m"
-}
-
 resource "helm_release" "argocd" {
   name       = "argocd"
   repository = "https://argoproj.github.io/argo-helm"
@@ -136,8 +132,7 @@ resource "helm_release" "argocd" {
   namespace  = "argocd"
 
   depends_on = [
-    kubernetes_namespace.argocd,
-    time_sleep.wait-for-3-mins
+    kubernetes_namespace.argocd
   ]
 
   set {
@@ -159,6 +154,14 @@ resource "helm_release" "argocd" {
     name  = "configs.secret.argocdServerAdminPassword"
     value = bcrypt(var.argocd_password)
   }
+}
+
+resource "time_sleep" "wait-for-3-mins-for-argocd-cleanup" {
+  destroy_duration = "3m"
+
+  depends_on = [
+    helm_release.argocd
+  ]
 }
 
 resource "helm_release" "argocd-base" {
