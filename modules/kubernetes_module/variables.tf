@@ -52,3 +52,9 @@ variable "argocd_password" {
   type        = string
   description = "admin password for argocd"
 }
+
+
+variable "init-yaml" {
+  type        = string
+  description = "rendered init.yaml"
+}

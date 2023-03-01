@@ -8,6 +8,10 @@ terraform {
       source  = "hashicorp/kubernetes"
       version = ">= 2.0.0"
     }
+    kubectl = {
+      source  = "gavinbunney/kubectl"
+      version = ">= 1.7.0"
+    }
   }
 
 }
@@ -24,6 +28,13 @@ provider "kubernetes" {
   host                   = var.kubernetes_host
   token                  = var.kubernetes_token
   cluster_ca_certificate = base64decode(var.kubernetes_certificate)
+}
+
+provider "kubectl" {
+  host                   = var.kubernetes_host
+  token                  = var.kubernetes_token
+  cluster_ca_certificate = base64decode(var.kubernetes_certificate)
+  load_config_file       = false
 }
 
 resource "kubernetes_namespace" "ingress" {
@@ -171,11 +182,6 @@ resource "helm_release" "argocd-base" {
   }
 
   set {
-    name  = "repo_url"
-    value = "git@github.com:${var.github_repo_owner}/${var.github_argocd_repo}.git"
-  }
-
-  set {
     name  = "repo_url_encoded"
     value = base64encode("git@github.com:${var.github_repo_owner}/${var.github_argocd_repo}.git")
   }
@@ -184,4 +190,12 @@ resource "helm_release" "argocd-base" {
     name  = "repo_private_key_encoded"
     value = base64encode(var.github_private_key)
   }
+}
+
+resource "kubectl_manifest" "init-yaml" {
+  yaml_body = var.init-yaml
+
+  depends_on = [
+    helm_release.argocd-base
+  ]
 }

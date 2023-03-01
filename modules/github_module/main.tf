@@ -47,7 +47,7 @@ data "template_file" "init-yaml" {
 resource "github_repository_file" "init-yaml" {
   repository     = var.argocd-repo
   branch         = "main"
-  file           = "test/init.yaml"
+  file           = "apps/init/init.yaml"
   commit_message = "Terraform > init.yaml"
   content        = data.template_file.init-yaml.rendered
 }
