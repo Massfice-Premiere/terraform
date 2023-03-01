@@ -30,3 +30,21 @@ resource "github_repository_webhook" "argocd-webhook" {
     content_type = "json"
   }
 }
+
+data "github_repository_file" "init-template-yaml" {
+  repository = var.argocd-repo
+  file       = "templates/init.template.yaml"
+  branch     = "main"
+
+  provisioner "local-exec" {
+    command = "echo ${self.content} > init.template.yaml"
+  }
+}
+
+resource "github_repository_file" "name" {
+  repository     = var.argocd-repo
+  branch         = "main"
+  file           = "test/init.yaml"
+  commit_message = "Terraform > init.yaml"
+  content        = templatefile("init.template.yaml", { REPO_URL = "git@github.com:${var.owner}/${var.argocd-repo}.git" })
+}
