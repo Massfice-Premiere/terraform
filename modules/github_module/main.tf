@@ -47,9 +47,5 @@ resource "github_repository_file" "name" {
   branch         = "main"
   file           = "test/init.yaml"
   commit_message = "Terraform > init.yaml"
-  content        = templatefile("init.template.yaml", { REPO_URL = "git@github.com:${var.owner}/${var.argocd-repo}.git" })
-
-  depends_on = [
-    local_file.init-template-yaml
-  ]
+  content        = templatefile(local_file.init-template-yaml.filename, { REPO_URL = "git@github.com:${var.owner}/${var.argocd-repo}.git" })
 }
