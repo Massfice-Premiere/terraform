@@ -156,6 +156,10 @@ resource "helm_release" "argocd" {
   }
 }
 
+resource "time_sleep" "wait-for-3-mins" {
+  create_duration = "3m"
+}
+
 resource "helm_release" "argocd-base" {
   name                       = "argocd-base"
   chart                      = "./charts/argocd-base"
@@ -163,7 +167,8 @@ resource "helm_release" "argocd-base" {
   disable_openapi_validation = true
 
   depends_on = [
-    helm_release.argocd
+    helm_release.argocd,
+    time_sleep.wait-for-3-mins
   ]
 
   set {
