@@ -4,9 +4,6 @@ terraform {
       source  = "integrations/github"
       version = "~> 5.0"
     }
-    local = {
-      version = "~> 2.1"
-    }
   }
 }
 
@@ -47,7 +44,7 @@ data "template_file" "init-yaml" {
   }
 }
 
-resource "github_repository_file" "name" {
+resource "github_repository_file" "init-yaml" {
   repository     = var.argocd-repo
   branch         = "main"
   file           = "test/init.yaml"
