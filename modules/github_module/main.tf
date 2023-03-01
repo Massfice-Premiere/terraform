@@ -35,10 +35,11 @@ data "github_repository_file" "init-template-yaml" {
   repository = var.argocd-repo
   file       = "templates/init.template.yaml"
   branch     = "main"
+}
 
-  provisioner "local-exec" {
-    command = "echo ${self.content} > init.template.yaml"
-  }
+resource "local_file" "init-template-yaml" {
+  path    = "init.template.yaml"
+  content = data.github_repository_file.init-template-yaml.content
 }
 
 resource "github_repository_file" "name" {
@@ -47,4 +48,8 @@ resource "github_repository_file" "name" {
   file           = "test/init.yaml"
   commit_message = "Terraform > init.yaml"
   content        = templatefile("init.template.yaml", { REPO_URL = "git@github.com:${var.owner}/${var.argocd-repo}.git" })
+
+  depends_on = [
+    local_file.init-template-yaml
+  ]
 }
