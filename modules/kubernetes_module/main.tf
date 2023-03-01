@@ -43,11 +43,11 @@ resource "kubernetes_namespace" "ingress" {
   }
 }
 
-resource "kubernetes_namespace" "argocd" {
-  metadata {
-    name = "argocd"
-  }
-}
+# resource "kubernetes_namespace" "argocd" {
+#   metadata {
+#     name = "argocd"
+#   }
+# }
 
 resource "kubernetes_namespace" "letsencrypt" {
   metadata {
