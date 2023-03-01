@@ -50,8 +50,4 @@ resource "github_repository_file" "name" {
   file           = "test/init.yaml"
   commit_message = "Terraform > init.yaml"
   content        = data.template_file.init-yaml.rendered
-
-  depends_on = [
-    local_file.init-template-yaml
-  ]
 }
