@@ -38,8 +38,8 @@ data "github_repository_file" "init-template-yaml" {
 }
 
 resource "local_file" "init-template-yaml" {
-  path    = "init.template.yaml"
-  content = data.github_repository_file.init-template-yaml.content
+  filename = "init.template.yaml"
+  content  = data.github_repository_file.init-template-yaml.content
 }
 
 resource "github_repository_file" "name" {
