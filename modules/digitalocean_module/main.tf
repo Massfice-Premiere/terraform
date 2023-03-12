@@ -56,10 +56,10 @@ resource "digitalocean_record" "a-record" {
   value  = digitalocean_loadbalancer.loadbalancer.ip
 }
 
-data "digitalocean_droplet" "droplets" {
-  for_each = {
-    for index, droplet in digitalocean_kubernetes_cluster.kubernetes.node_pool[0].nodes : droplet.droplet_id => droplet
-  }
+# data "digitalocean_droplet" "droplets" {
+#   for_each = {
+#     for index, droplet in digitalocean_kubernetes_cluster.kubernetes.node_pool[0].nodes : droplet.droplet_id => droplet
+#   }
 
-  id = each.value.droplet_id
-}
+#   id = each.value.droplet_id
+# }
