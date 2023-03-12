@@ -13,7 +13,7 @@ provider "digitalocean" {
 resource "digitalocean_kubernetes_cluster" "kubernetes" {
   region  = "fra1"
   name    = var.cluster_name
-  version = "1.25.4-do.0"
+  version = "v1.25.4-do.0"
 
   node_pool {
     name       = "worker-pool"
@@ -56,10 +56,10 @@ resource "digitalocean_record" "a-record" {
   value  = digitalocean_loadbalancer.loadbalancer.ip
 }
 
-# data "digitalocean_droplet" "droplets" {
-#   for_each = {
-#     for index, droplet in digitalocean_kubernetes_cluster.kubernetes.node_pool[0].nodes : droplet.droplet_id => droplet
-#   }
+data "digitalocean_droplet" "droplets" {
+  for_each = {
+    for index, droplet in digitalocean_kubernetes_cluster.kubernetes.node_pool[0].nodes : droplet.droplet_id => droplet
+  }
 
-#   id = each.value.droplet_id
-# }
+  id = each.value.droplet_id
+}
