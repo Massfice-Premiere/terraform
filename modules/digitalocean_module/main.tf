@@ -10,10 +10,12 @@ provider "digitalocean" {
   token = var.token
 }
 
+data "digitalocean_kubernetes_versions" "kubernetes_version" {}
+
 resource "digitalocean_kubernetes_cluster" "kubernetes" {
   region  = "fra1"
   name    = var.cluster_name
-  version = "1.25.4-do.0"
+  version = data.digitalocean_kubernetes_versions.kubernetes_version.latest_version
 
   node_pool {
     name       = "worker-pool"
