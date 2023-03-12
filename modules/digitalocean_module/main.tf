@@ -11,9 +11,8 @@ provider "digitalocean" {
 }
 
 resource "digitalocean_kubernetes_cluster" "kubernetes" {
-  region  = "fra1"
-  name    = var.cluster_name
-  version = "1.24.8-do.0"
+  region = "fra1"
+  name   = var.cluster_name
 
   node_pool {
     name       = "worker-pool"
