@@ -17,3 +17,12 @@ output "loadbalancer_name" {
   value       = digitalocean_loadbalancer.loadbalancer.name
   description = "loadbalancer name"
 }
+
+output "kubernetes_nodes_ips" {
+  value = [
+    data.digitalocean_droplet.kube-node-0.ipv4_address,
+    data.digitalocean_droplet.kube-node-1.ipv4_address,
+    data.digitalocean_droplet.kube-node-2.ipv4_address
+  ]
+  description = "kubernetes nodes ips"
+}
