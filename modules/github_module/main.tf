@@ -31,12 +31,6 @@ resource "github_repository_webhook" "argocd-webhook" {
   }
 }
 
-data "github_repository_file" "projects-yaml" {
-  repository = var.argocd-repo
-  file       = "apps/init/projects.yaml"
-  branch     = "main"
-}
-
 data "github_repository_file" "init-template-yaml" {
   repository = var.argocd-repo
   file       = "templates/init.template.yaml"

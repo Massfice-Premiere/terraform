@@ -9,6 +9,6 @@ output "init-yaml" {
 }
 
 output "projects-yaml" {
-  value       = data.github_repository_file.projects-yaml.content
+  value       = data.template_file.projects-yaml.rendered
   description = "projects.yaml"
 }
