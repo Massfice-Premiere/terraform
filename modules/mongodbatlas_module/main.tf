@@ -21,7 +21,7 @@ resource "mongodbatlas_project_ip_access_list" "ips" {
 
 resource "mongodbatlas_serverless_instance" "nonprod-db" {
   project_id                              = var.project_id
-  name                                    = "${var.dbname}-nonprod"
+  name                                    = "${var.db_name}-nonprod"
   provider_settings_backing_provider_name = "AWS"
   provider_settings_provider_name         = "SERVERLESS"
   provider_settings_region_name           = "EU_WEST_1"
@@ -31,7 +31,7 @@ resource "mongodbatlas_serverless_instance" "nonprod-db" {
 
 resource "mongodbatlas_serverless_instance" "prod-db" {
   project_id                              = var.project_id
-  name                                    = "${var.dbname}-prod"
+  name                                    = "${var.db_name}-prod"
   provider_settings_backing_provider_name = "AWS"
   provider_settings_provider_name         = "SERVERLESS"
   provider_settings_region_name           = "EU_WEST_1"
