@@ -19,10 +19,10 @@ output "loadbalancer_name" {
 }
 
 output "kubernetes_nodes_ips" {
-  value = [
-    data.digitalocean_droplet.kube-node-0.ipv4_address,
-    data.digitalocean_droplet.kube-node-1.ipv4_address,
-    data.digitalocean_droplet.kube-node-2.ipv4_address
-  ]
+  value = {
+    node-0 = data.digitalocean_droplet.kube-node-0.ipv4_address
+    node-1 = data.digitalocean_droplet.kube-node-1.ipv4_address
+    node-3 = data.digitalocean_droplet.kube-node-2.ipv4_address
+  }
   description = "kubernetes nodes ips"
 }

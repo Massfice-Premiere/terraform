@@ -14,9 +14,9 @@ provider "mongodbatlas" {
 
 resource "mongodbatlas_project_ip_access_list" "ips" {
   project_id = var.project_id
-  for_each   = toset(var.ips_to_whitelist)
-  comment    = "Kubernetes node: ${each.key}"
-  ip_address = each.key
+  for_each   = var.ips_to_whitelist
+  comment    = "Kubernetes node: ${each.value}"
+  ip_address = each.value
 }
 
 resource "mongodbatlas_serverless_instance" "nonprod-db" {

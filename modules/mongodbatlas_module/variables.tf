@@ -14,7 +14,7 @@ variable "project_id" {
 }
 
 variable "ips_to_whitelist" {
-  type        = list(string)
+  type        = map(string)
   description = "ip adresses to whitelist"
 }
 
