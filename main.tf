@@ -5,8 +5,9 @@ terraform {
 module "digitalocean_module" {
   source = "./modules/digitalocean_module"
 
-  token  = var.digitalocean_token
-  domain = var.domain
+  token        = var.digitalocean_token
+  domain       = var.domain
+  cluster_name = var.identifier_name
 }
 
 module "github_module" {
@@ -16,6 +17,16 @@ module "github_module" {
   owner          = var.github_owner
   argocd-repo    = var.github_argo_repo
   cluster-domain = var.domain
+}
+
+module "mongodbatlas_module" {
+  source = "./modules/mongodbatlas_module"
+
+  public_key       = var.mongodbatlas_public_key
+  private_key      = var.mongodbatlas_private_key
+  project_id       = var.mongodbatlas_project_id
+  db_name          = var.identifier_name
+  ips_to_whitelist = module.digitalocean_module.kubernetes_nodes_ips
 }
 
 

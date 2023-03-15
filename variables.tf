@@ -8,6 +8,26 @@ variable "github_token" {
   description = "token for connecting to github"
 }
 
+variable "mongodbatlas_public_key" {
+  type        = string
+  description = "public key for connecting to mongodb atlas"
+}
+
+variable "mongodbatlas_private_key" {
+  type        = string
+  description = "private key for connecting to mongodb atlas"
+}
+
+variable "mongodbatlas_project_id" {
+  type        = string
+  description = "mongodb atlas project id"
+}
+
+variable "identifier_name" {
+  type = string
+  description = "application or project name"
+}
+
 variable "letsencrypt_email" {
   type        = string
   description = "email for ssl certificate"
