@@ -39,3 +39,39 @@ resource "mongodbatlas_serverless_instance" "prod-db" {
   termination_protection_enabled          = true
 }
 
+resource "random_password" "nonprod-user-password" {
+  length           = 16
+  special          = true
+  override_special = "!#$%&*()-_=+[]{}<>:?"
+}
+
+resource "random_password" "prod-user-password" {
+  length           = 16
+  special          = true
+  override_special = "!#$%&*()-_=+[]{}<>:?"
+}
+
+resource "mongodbatlas_database_user" "nonprod-user" {
+  username           = "nonprod-user"
+  password           = random_password.nonprod-user-password.result
+  project_id         = var.project_id
+  auth_database_name = "admin"
+
+  roles {
+    role_name     = "readWrite"
+    database_name = mongodbatlas_serverless_instance.nonprod-db.name
+  }
+}
+
+resource "mongodbatlas_database_user" "prod-user" {
+  username           = "prod-user"
+  password           = random_password.prod-user-password.result
+  project_id         = var.project_id
+  auth_database_name = "admin"
+
+  roles {
+    role_name     = "readWrite"
+    database_name = mongodbatlas_serverless_instance.prod-db.name
+  }
+}
+

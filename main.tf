@@ -22,11 +22,15 @@ module "github_module" {
 module "mongodbatlas_module" {
   source = "./modules/mongodbatlas_module"
 
-  public_key       = var.mongodbatlas_public_key
-  private_key      = var.mongodbatlas_private_key
-  project_id       = var.mongodbatlas_project_id
-  db_name          = var.identifier_name
-  ips_to_whitelist = module.digitalocean_module.kubernetes_nodes_ips
+  public_key  = var.mongodbatlas_public_key
+  private_key = var.mongodbatlas_private_key
+  project_id  = var.mongodbatlas_project_id
+  db_name     = var.identifier_name
+  ips_to_whitelist = {
+    kubernetes_node0 = module.digitalocean_module.node0_ip,
+    kubernetes_node1 = module.digitalocean_module.node1_ip,
+    kubernetes_node2 = module.digitalocean_module.node2_ip
+  }
 }
 
 
