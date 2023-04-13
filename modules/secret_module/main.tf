@@ -1,9 +1,18 @@
 terraform {
   required_providers {
+    github = {
+      source  = "integrations/github"
+      version = "~> 5.0"
+    }
     sealedsecret = {
       source = "2ttech/sealedsecret"
     }
   }
+}
+
+provider "github" {
+  token = var.github_token
+  owner = var.github_owner
 }
 
 resource "sealedsecret_raw_secrets" "secret" {
@@ -20,4 +29,12 @@ data "template_file" "sealed-secret-yaml" {
     SECRET_TYPE = var.type
     SECRET_DATA = sealedsecret_raw_secrets.secret.encrypted_values
   }
+}
+
+resource "github_repository_file" "sealed-secret" {
+  repository     = var.github_argocd-repo
+  branch         = "main"
+  file           = var.location
+  commit_message = "Terraform > ${var.location}"
+  content        = data.template_file.sealed-secret-yaml.rendered
 }

@@ -1,3 +1,18 @@
+variable "github_token" {
+  type        = string
+  description = "token for connecting to github"
+}
+
+variable "github_owner" {
+  type        = string
+  description = "owner of github org"
+}
+
+variable "github_argocd-repo" {
+  type        = string
+  description = "name of argocd repository"
+}
+
 variable "name" {
   type        = string
   description = "name of secret"

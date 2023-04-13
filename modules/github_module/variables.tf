@@ -17,14 +17,3 @@ variable "cluster-domain" {
   type        = string
   description = "domain of argocd cluster"
 }
-
-variable "secrets" {
-  type = list(
-    object({
-      location = string
-      yaml     = string
-      id       = string
-    })
-  )
-  description = "list of secrets"
-}

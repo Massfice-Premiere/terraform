@@ -72,12 +72,3 @@ resource "github_repository_file" "projects-yaml" {
   commit_message = "Terraform > projects.yaml"
   content        = data.template_file.projects-yaml.rendered
 }
-
-resource "github_repository_file" "sealed-secrets" {
-  for_each       = var.secrets
-  repository     = var.argocd-repo
-  branch         = "main"
-  file           = each.value.location
-  commit_message = "Terraform > ${each.value.id}"
-  content        = each.value.yaml
-}
