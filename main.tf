@@ -13,6 +13,11 @@ terraform {
 provider "github" {
   token = var.github_token
   owner = var.github_owner
+  alias = "github"
+}
+
+provider "sealedsecret" {
+  alias = "sealedsecret"
 }
 
 resource "tls_private_key" "sealed-secret-key" {
@@ -89,8 +94,8 @@ module "secret_module" {
   sealing_certificate = tls_self_signed_cert.sealed-secret-cert.cert_pem
 
   providers = {
-    github       = github
-    sealedsecret = sealedsecret
+    github       = github.github
+    sealedsecret = sealedsecret.sealedsecret
   }
 }
 

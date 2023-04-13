@@ -2,11 +2,6 @@ terraform {
   required_providers {}
 }
 
-provider "github" {
-  token = var.github_token
-  owner = var.github_owner
-}
-
 resource "sealedsecret_raw_secrets" "secret" {
   name        = var.name
   namespace   = var.namespace
