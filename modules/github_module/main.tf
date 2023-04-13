@@ -115,4 +115,7 @@ resource "github_repository_file" "sealed-secrets" {
     SECRET_TYPE = each.value.type
     SECRET_DATA = lookup(lookup(sealedsecret_raw_secrets.secrets, "${each.value.namespace}/${each.value.location}", {}), "encrypted_values", {})
   })
+  depends_on = [
+    sealedsecret_raw_secrets.secrets
+  ]
 }
