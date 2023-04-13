@@ -5,8 +5,7 @@ terraform {
       version = "~> 5.0"
     }
     sealed-secrets = {
-      source  = "datalbry/sealed-secrets"
-      version = "0.2.2"
+      source = "datalbry/sealed-secrets"
     }
   }
 }
