@@ -102,13 +102,12 @@ resource "sealedsecret_raw_secrets" "secrets" {
   namespace   = each.value.namespace
   certificate = tls_self_signed_cert.sealed-secret-cert.cert_pem
   values      = each.value.data
-  id          = each.value.location
 }
 
 resource "github_repository_file" "sealed-secrets" {
   repository     = var.argocd-repo
   branch         = "main"
-  file           = sealedsecret_raw_secrets.secrets.id
-  commit_message = "Terraform > ${sealedsecret_raw_secrets.secrets.id}"
+  file           = "apps/standard/${sealedsecret_raw_secrets.secrets.id}.yaml"
+  commit_message = "Terraform > ${sealedsecret_raw_secrets.secrets.name}.yaml"
   content        = yamlencode(sealedsecret_raw_secrets.secrets.encrypted_values)
 }

@@ -24,7 +24,6 @@ variable "secrets" {
       name      = string
       namespace = string
       type      = string
-      location  = string
       data      = map(any)
     })
   )
