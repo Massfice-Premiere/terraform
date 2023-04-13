@@ -5,7 +5,7 @@ terraform {
       version = "~> 5.0"
     }
     terraform-provider-sealedsecret = {
-      source = "2ttech/terraform-provider-sealedsecret"
+      source = "2ttech/sealedsecret"
     }
   }
 }
