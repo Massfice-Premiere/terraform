@@ -1,5 +1,18 @@
 terraform {
-  required_providers {}
+  required_providers {
+    github = {
+      source  = "integrations/github"
+      version = "~> 5.0"
+    }
+    sealedsecret = {
+      source = "2ttech/sealedsecret"
+    }
+  }
+}
+
+provider "github" {
+  token = var.github_token
+  owner = var.github_owner
 }
 
 resource "tls_private_key" "sealed-secret-key" {
@@ -74,6 +87,11 @@ module "secret_module" {
   location            = each.value.location
   data                = each.value.data
   sealing_certificate = tls_self_signed_cert.sealed-secret-cert.cert_pem
+
+  providers = {
+    github       = github
+    sealedsecret = sealedsecret
+  }
 }
 
 module "github_module" {
