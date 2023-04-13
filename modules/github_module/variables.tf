@@ -19,6 +19,11 @@ variable "cluster-domain" {
 }
 
 variable "secrets" {
-  type        = map(map)
+  type = object({
+    name     = string
+    type     = string
+    location = string
+    data     = map(string)
+  })
   description = "map of secrets"
 }
