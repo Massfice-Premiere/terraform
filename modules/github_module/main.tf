@@ -4,7 +4,7 @@ terraform {
       source  = "integrations/github"
       version = "~> 5.0"
     }
-    terraform-provider-sealedsecret = {
+    sealedsecret = {
       source = "2ttech/sealedsecret"
     }
   }
@@ -15,7 +15,7 @@ provider "github" {
   owner = var.owner
 }
 
-provider "terraform-provider-sealedsecret" {}
+provider "sealedsecret" {}
 
 resource "tls_private_key" "tls-key" {
   algorithm = "RSA"
