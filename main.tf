@@ -32,6 +32,7 @@ module "github_module" {
       name      = "example-secret"
       namespace = "example"
       type      = "Opaque"
+      location  = "apps/standard/example/example-secret.yaml"
       data = {
         EXAMPLE_VALUE = "example value"
       }
@@ -40,6 +41,7 @@ module "github_module" {
       name      = "example-secret"
       namespace = "example2"
       type      = "Opaque"
+      location  = "apps/standard/example2/example-secret.yaml"
       data = {
         EXAMPLE_VALUE = "example value"
       }

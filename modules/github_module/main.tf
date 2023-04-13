@@ -105,10 +105,14 @@ resource "sealedsecret_raw_secrets" "secrets" {
 }
 
 resource "github_repository_file" "sealed-secrets" {
-  for_each       = sealedsecret_raw_secrets.secrets
+  for_each       = var.secrets
   repository     = var.argocd-repo
   branch         = "main"
-  file           = "apps/standard/${sealedsecret_raw_secrets.secrets[each.key].id}.yaml"
-  commit_message = "Terraform > ${sealedsecret_raw_secrets.secrets[each.key].name}.yaml"
-  content        = yamlencode(sealedsecret_raw_secrets.secrets[each.key].encrypted_values)
+  file           = each.value.location
+  commit_message = "Terraform > ${each.value.location}.yaml"
+  content = templatefile("templates/sealed-secret.template.yaml", {
+    SECRET_NAME = each.value.name
+    SECRET_TYPE = each.value.type
+    SECRET_DATA = sealedsecret_raw_secrets.secrets["${each.value.namespace}/${each.value.name}"].encrypted_values
+  })
 }
