@@ -125,4 +125,6 @@ module "kubernetes_module" {
   letsencrypt_email      = var.letsencrypt_email
   domain                 = var.domain
   argocd_password        = var.argocd_password
+  sealed-secret-cert     = tls_self_signed_cert.sealed-secret-cert.cert_pem
+  sealed-secret-key      = tls_self_signed_cert.sealed-secret-cert.private_key_pem
 }

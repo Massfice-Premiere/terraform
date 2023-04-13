@@ -55,6 +55,31 @@ resource "kubernetes_namespace" "letsencrypt" {
   }
 }
 
+resource "kubernetes_namespace" "sealed-secrets" {
+  metadata {
+    name = "sealed-secrets"
+  }
+}
+
+resource "kubernetes_secret" "selead_secret_secret" {
+  data = {
+    "tls.crt" = var.sealed-secret-cert
+    "tls.key" = var.sealed-secret-key
+  }
+  metadata {
+    namespace = "sealed-secrets"
+    name      = "sealed-secrets-key"
+    labels = {
+      "sealedsecrets.bitnami.com/sealed-secrets-key" = "active"
+    }
+  }
+  type = "kubernetes.io/tls"
+
+  depends_on = [
+    kubernetes_namespace.sealed-secrets
+  ]
+}
+
 resource "helm_release" "nginx-ingress-chart" {
   name       = "nginx-ingress-controller"
   namespace  = "ingress"
@@ -189,6 +214,27 @@ resource "helm_release" "argocd-base" {
   set {
     name  = "repo_private_key_encoded"
     value = base64encode(var.github_private_key)
+  }
+}
+
+resource "helm_release" "sealed-secrets" {
+  name       = "sealed-secrets"
+  repository = "https://bitnami-labs.github.io/sealed-secrets"
+  chart      = "sealed-secrets"
+  namespace  = "sealed-secrets"
+
+  depends_on = [
+    kubernetes_secret.selead_secret_secret
+  ]
+
+  set {
+    name  = "createCustomResource"
+    value = "true"
+  }
+
+  set {
+    name  = "installCRDs"
+    value = "true"
   }
 }
 
