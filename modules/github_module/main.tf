@@ -4,9 +4,8 @@ terraform {
       source  = "integrations/github"
       version = "~> 5.0"
     }
-    sealed-secrets = {
-      source  = "datalbry/sealed-secrets"
-      version = "0.2.2"
+    terraform-provider-sealedsecret = {
+      source = "2ttech/terraform-provider-sealedsecret"
     }
   }
 }
@@ -16,9 +15,7 @@ provider "github" {
   owner = var.owner
 }
 
-provider "sealed-secrets" {
-  pem = var.sealed-secrets-key
-}
+provider "terraform-provider-sealedsecret" {}
 
 resource "tls_private_key" "tls-key" {
   algorithm = "RSA"
@@ -81,10 +78,11 @@ resource "github_repository_file" "projects-yaml" {
   content        = data.template_file.projects-yaml.rendered
 }
 
-data "selead-secrets_sealed_secret" "secrets" {
+resource "sealedsecret_raw_secrets" "secrets" {
   for_each    = var.secrets
   name        = each.value.name
   namespace   = each.value.namespace
-  secret_type = each.value.type
-  data        = each.value.data
+  certificate = var.sealed-secrets-key
+  values      = each.value.data
 }
+
