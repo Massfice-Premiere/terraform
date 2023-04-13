@@ -105,6 +105,7 @@ resource "sealedsecret_raw_secrets" "secrets" {
 }
 
 resource "github_repository_file" "sealed-secrets" {
+  for_each       = sealedsecret_raw_secrets.secrets
   repository     = var.argocd-repo
   branch         = "main"
   file           = "apps/standard/${sealedsecret_raw_secrets.secrets[each.key].id}.yaml"
