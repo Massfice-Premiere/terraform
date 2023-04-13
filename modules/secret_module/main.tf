@@ -1,5 +1,13 @@
 terraform {
-  required_providers {}
+  required_providers {
+    github = {
+      source  = "integrations/github"
+      version = "~> 5.0"
+    }
+    sealedsecret = {
+      source = "2ttech/sealedsecret"
+    }
+  }
 }
 
 resource "sealedsecret_raw_secrets" "secret" {
