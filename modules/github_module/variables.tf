@@ -17,3 +17,8 @@ variable "cluster-domain" {
   type        = string
   description = "domain of argocd cluster"
 }
+
+variable "secrets" {
+  type = map(map(string))
+  description = "map of secrets"
+}

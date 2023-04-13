@@ -10,15 +10,6 @@ module "digitalocean_module" {
   cluster_name = var.identifier_name
 }
 
-module "github_module" {
-  source = "./modules/github_module"
-
-  token          = var.github_token
-  owner          = var.github_owner
-  argocd-repo    = var.github_argo_repo
-  cluster-domain = var.domain
-}
-
 module "mongodbatlas_module" {
   source = "./modules/mongodbatlas_module"
 
@@ -33,6 +24,32 @@ module "mongodbatlas_module" {
   }
 }
 
+module "github_module" {
+  source = "./modules/github_module"
+
+  secrets = {
+    example_secret = {
+      name     = "example-secret"
+      type     = "Opaque"
+      location = "apps/standard/example/example-secret.yaml"
+      data = {
+        EXAMPLE_VALUE = "example value"
+      }
+    }
+    example_secret_2 = {
+      name     = "example-secret"
+      type     = "Opaque"
+      location = "apps/standard/example2/example-secret.yaml"
+      data = {
+        EXAMPLE_VALUE = "example value"
+      }
+    }
+  }
+  token          = var.github_token
+  owner          = var.github_owner
+  argocd-repo    = var.github_argo_repo
+  cluster-domain = var.domain
+}
 
 module "kubernetes_module" {
   source = "./modules/kubernetes_module"
@@ -51,4 +68,3 @@ module "kubernetes_module" {
   domain                 = var.domain
   argocd_password        = var.argocd_password
 }
-

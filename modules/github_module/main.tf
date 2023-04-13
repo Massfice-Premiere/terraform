@@ -4,12 +4,26 @@ terraform {
       source  = "integrations/github"
       version = "~> 5.0"
     }
+    sealed-secrets = {
+      source  = "datalbry/sealed-secrets"
+      version = "0.2.2"
+    }
   }
 }
 
 provider "github" {
   token = var.token
   owner = var.owner
+}
+
+resource "tls_private_key" "sealed-secret-key" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+
+provider "sealed-secrets" {
+  pem = tls_private_key.sealed-secret-key.public_key_openssh
 }
 
 resource "tls_private_key" "tls-key" {
