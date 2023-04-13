@@ -113,6 +113,6 @@ resource "github_repository_file" "sealed-secrets" {
   content = templatefile("templates/sealed-secret.template.yaml", {
     SECRET_NAME = each.value.name
     SECRET_TYPE = each.value.type
-    SECRET_DATA = sealedsecret_raw_secrets.secrets["${each.value.namespace}/${each.value.name}"].encrypted_values
+    SECRET_DATA = lookup(lookup(sealedsecret_raw_secrets.secrets, "${each.value.namespace}/${each.value.location}", {}), "encrypted_values", {})
   })
 }
