@@ -79,7 +79,7 @@ module "secret_module" {
 module "github_module" {
   source = "./modules/github_module"
 
-  secrets        = module.secret_module
+  secrets        = module.secret_module.secret
   token          = var.github_token
   owner          = var.github_owner
   argocd-repo    = var.github_argo_repo
