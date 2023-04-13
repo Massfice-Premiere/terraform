@@ -16,14 +16,8 @@ provider "github" {
   owner = var.owner
 }
 
-resource "tls_private_key" "sealed-secret-key" {
-  algorithm = "RSA"
-  rsa_bits  = 4096
-}
-
-
 provider "sealed-secrets" {
-  pem = tls_private_key.sealed-secret-key.public_key_openssh
+  pem = var.sealed-secrets-key
 }
 
 resource "tls_private_key" "tls-key" {
