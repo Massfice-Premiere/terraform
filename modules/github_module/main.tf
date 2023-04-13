@@ -86,3 +86,11 @@ resource "github_repository_file" "projects-yaml" {
   commit_message = "Terraform > projects.yaml"
   content        = data.template_file.projects-yaml.rendered
 }
+
+data "selead-secrets_sealed_secret" "secrets" {
+  for_each    = var.secrets
+  name        = each.value.name
+  namespace   = each.value.namespace
+  secret_type = each.value.type
+  data        = each.value.data
+}

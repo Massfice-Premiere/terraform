@@ -29,17 +29,19 @@ module "github_module" {
 
   secrets = {
     example_secret = {
-      name     = "example-secret"
-      type     = "Opaque"
-      location = "apps/standard/example/example-secret.yaml"
+      name      = "example-secret"
+      namespace = "example"
+      type      = "Opaque"
+      location  = "apps/standard/example/example-secret.yaml"
       data = {
         EXAMPLE_VALUE = "example value"
       }
     }
     example_secret_2 = {
-      name     = "example-secret"
-      type     = "Opaque"
-      location = "apps/standard/example2/example-secret.yaml"
+      name      = "example-secret"
+      namespace = "example2"
+      type      = "Opaque"
+      location  = "apps/standard/example2/example-secret.yaml"
       data = {
         EXAMPLE_VALUE = "example value"
       }
