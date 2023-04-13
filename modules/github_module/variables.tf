@@ -19,6 +19,6 @@ variable "cluster-domain" {
 }
 
 variable "secrets" {
-  type = map(map(string))
+  type        = map(map)
   description = "map of secrets"
 }
