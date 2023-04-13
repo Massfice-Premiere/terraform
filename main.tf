@@ -92,6 +92,7 @@ module "secret_module" {
   location            = each.value.location
   data                = each.value.data
   sealing_certificate = tls_self_signed_cert.sealed-secret-cert.cert_pem
+  github_argocd-repo  = var.github_argo_repo
 
   providers = {
     github       = github.github
