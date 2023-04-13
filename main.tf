@@ -1,5 +1,10 @@
 terraform {
-  required_providers {}
+  required_providers {
+    sealed-secrets = {
+      source  = "datalbry/sealed-secrets"
+      version = "0.2.2"
+    }
+  }
 }
 
 module "digitalocean_module" {
