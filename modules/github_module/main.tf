@@ -107,7 +107,7 @@ resource "sealedsecret_raw_secrets" "secrets" {
 resource "github_repository_file" "sealed-secrets" {
   repository     = var.argocd-repo
   branch         = "main"
-  file           = "apps/standard/${sealedsecret_raw_secrets.secrets.id}.yaml"
-  commit_message = "Terraform > ${sealedsecret_raw_secrets.secrets.name}.yaml"
-  content        = yamlencode(sealedsecret_raw_secrets.secrets.encrypted_values)
+  file           = "apps/standard/${sealedsecret_raw_secrets.secrets[each.key].id}.yaml"
+  commit_message = "Terraform > ${sealedsecret_raw_secrets.secrets[each.key].name}.yaml"
+  content        = yamlencode(sealedsecret_raw_secrets.secrets[each.key].encrypted_values)
 }
