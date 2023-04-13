@@ -25,6 +25,21 @@ resource "tls_private_key" "sealed-secret-key" {
   rsa_bits  = 4096
 }
 
+resource "tls_self_signed_cert" "sealed-secret-cert" {
+  private_key_pem       = tls_private_key.sealed-secret-key.private_key_pem
+  validity_period_hours = 87660
+  allowed_uses = [
+    "key_encipherment",
+    "digital_signature",
+    "server_auth",
+  ]
+
+  subject {
+    common_name  = "sealed_secrets"
+    organization = "sealed_secrets"
+  }
+}
+
 resource "github_user_ssh_key" "argocd-key" {
   title = "argocd-key"
   key   = tls_private_key.tls-key.public_key_openssh
@@ -85,7 +100,7 @@ resource "sealedsecret_raw_secrets" "secrets" {
   for_each    = var.secrets
   name        = each.value.name
   namespace   = each.value.namespace
-  certificate = tls_private_key.sealed-secret-key.public_key_pem
+  certificate = tls_self_signed_cert.sealed-secret-cert.cert_pem
   values      = each.value.data
 }
 
