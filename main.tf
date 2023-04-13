@@ -2,11 +2,6 @@ terraform {
   required_providers {}
 }
 
-resource "tls_private_key" "sealed-secret-key" {
-  algorithm = "RSA"
-  rsa_bits  = 4096
-}
-
 module "digitalocean_module" {
   source = "./modules/digitalocean_module"
 
@@ -52,11 +47,10 @@ module "github_module" {
       }
     }
   }
-  sealed-secrets-key = tls_private_key.sealed-secret-key.public_key_openssh
-  token              = var.github_token
-  owner              = var.github_owner
-  argocd-repo        = var.github_argo_repo
-  cluster-domain     = var.domain
+  token          = var.github_token
+  owner          = var.github_owner
+  argocd-repo    = var.github_argo_repo
+  cluster-domain = var.domain
 }
 
 module "kubernetes_module" {

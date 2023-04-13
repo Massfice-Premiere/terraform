@@ -15,9 +15,12 @@ provider "github" {
   owner = var.owner
 }
 
-provider "sealedsecret" {}
-
 resource "tls_private_key" "tls-key" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+resource "tls_private_key" "sealed-secret-key" {
   algorithm = "RSA"
   rsa_bits  = 4096
 }
@@ -82,7 +85,7 @@ resource "sealedsecret_raw_secrets" "secrets" {
   for_each    = var.secrets
   name        = each.value.name
   namespace   = each.value.namespace
-  certificate = var.sealed-secrets-key
+  certificate = tls_private_key.sealed-secret-key.public_key_pem
   values      = each.value.data
 }
 

@@ -30,8 +30,3 @@ variable "secrets" {
   )
   description = "map of secrets"
 }
-
-variable "sealed-secrets-key" {
-  type        = string
-  description = "key for sealing secrets"
-}
