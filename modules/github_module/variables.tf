@@ -19,14 +19,12 @@ variable "cluster-domain" {
 }
 
 variable "secrets" {
-  type = map(
+  type = list(
     object({
-      name      = string
-      namespace = string
-      type      = string
-      location  = string
-      data      = map(any)
+      location = string
+      yaml     = string
+      id       = string
     })
   )
-  description = "map of secrets"
+  description = "list of secrets"
 }

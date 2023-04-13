@@ -4,9 +4,6 @@ terraform {
       source  = "integrations/github"
       version = "~> 5.0"
     }
-    sealedsecret = {
-      source = "2ttech/sealedsecret"
-    }
   }
 }
 
@@ -18,26 +15,6 @@ provider "github" {
 resource "tls_private_key" "tls-key" {
   algorithm = "RSA"
   rsa_bits  = 4096
-}
-
-resource "tls_private_key" "sealed-secret-key" {
-  algorithm = "RSA"
-  rsa_bits  = 4096
-}
-
-resource "tls_self_signed_cert" "sealed-secret-cert" {
-  private_key_pem       = tls_private_key.sealed-secret-key.private_key_pem
-  validity_period_hours = 87660
-  allowed_uses = [
-    "key_encipherment",
-    "digital_signature",
-    "server_auth",
-  ]
-
-  subject {
-    common_name  = "sealed_secrets"
-    organization = "sealed_secrets"
-  }
 }
 
 resource "github_user_ssh_key" "argocd-key" {
@@ -96,26 +73,11 @@ resource "github_repository_file" "projects-yaml" {
   content        = data.template_file.projects-yaml.rendered
 }
 
-resource "sealedsecret_raw_secrets" "secrets" {
-  for_each    = var.secrets
-  name        = each.value.name
-  namespace   = each.value.namespace
-  certificate = tls_self_signed_cert.sealed-secret-cert.cert_pem
-  values      = each.value.data
-}
-
 resource "github_repository_file" "sealed-secrets" {
   for_each       = var.secrets
   repository     = var.argocd-repo
   branch         = "main"
   file           = each.value.location
-  commit_message = "Terraform > ${each.value.location}.yaml"
-  content = templatefile("templates/sealed-secret.template.yaml", {
-    SECRET_NAME = each.value.name
-    SECRET_TYPE = each.value.type
-    SECRET_DATA = lookup(lookup(sealedsecret_raw_secrets.secrets, "${each.value.namespace}/${each.value.location}", {}), "encrypted_values", {})
-  })
-  depends_on = [
-    sealedsecret_raw_secrets.secrets
-  ]
+  commit_message = "Terraform > ${each.value.id}"
+  content        = each.value.yaml
 }

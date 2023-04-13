@@ -2,6 +2,26 @@ terraform {
   required_providers {}
 }
 
+resource "tls_private_key" "sealed-secret-key" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+resource "tls_self_signed_cert" "sealed-secret-cert" {
+  private_key_pem       = tls_private_key.sealed-secret-key.private_key_pem
+  validity_period_hours = 87660
+  allowed_uses = [
+    "key_encipherment",
+    "digital_signature",
+    "server_auth",
+  ]
+
+  subject {
+    common_name  = "sealed_secrets"
+    organization = "sealed_secrets"
+  }
+}
+
 module "digitalocean_module" {
   source = "./modules/digitalocean_module"
 
@@ -24,10 +44,10 @@ module "mongodbatlas_module" {
   }
 }
 
-module "github_module" {
-  source = "./modules/github_module"
+module "secret_module" {
+  source = "./modules/secret_module"
 
-  secrets = {
+  for_each = {
     example_secret = {
       name      = "example-secret"
       namespace = "example"
@@ -47,6 +67,19 @@ module "github_module" {
       }
     }
   }
+
+  name                = each.value.name
+  namespace           = each.value.namespace
+  type                = each.value.type
+  location            = each.value.location
+  data                = each.value.data
+  sealing_certificate = tls_self_signed_cert.sealed-secret-cert.cert_pem
+}
+
+module "github_module" {
+  source = "./modules/github_module"
+
+  secrets        = module.secret_module
   token          = var.github_token
   owner          = var.github_owner
   argocd-repo    = var.github_argo_repo
