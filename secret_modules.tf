@@ -40,6 +40,35 @@ module "secret_module" {
         EXAMPLE_VALUE = "example value"
       }
     }
+    pull_secret_example = {
+      name      = "pull-secret"
+      namespace = "example"
+      type      = "kubernetes.io/dockerconfigjson"
+      location  = "apps/standard/example/pull-secret.yaml"
+      data = {
+        ".dockerconfigjson" = jsonencode({
+          auths = {
+            "https://index.docker.io/v1/" = {
+              auth = base64encode("${var.dockerhub_username}:${var.dockerhub_password}")
+            }
+          }
+        })
+      }
+    }
+    pull_secret_example_2 = {
+      name      = "pull-secret"
+      namespace = "example2"
+      location  = "apps/standard/example2/pull-secret.yaml"
+      data = {
+        ".dockerconfigjson" = jsonencode({
+          auths = {
+            "https://index.docker.io/v1/" = {
+              auth = base64encode("${var.dockerhub_username}:${var.dockerhub_password}")
+            }
+          }
+        })
+      }
+    }
   }
 
   name                = each.value.name

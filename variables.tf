@@ -24,7 +24,7 @@ variable "mongodbatlas_project_id" {
 }
 
 variable "identifier_name" {
-  type = string
+  type        = string
   description = "application or project name"
 }
 
@@ -51,4 +51,14 @@ variable "github_argo_repo" {
 variable "argocd_password" {
   type        = string
   description = "admin password for argocd"
+}
+
+variable "dockerhub_username" {
+  type        = string
+  description = "dockehub username"
+}
+
+variable "dockerhub_password" {
+  type        = string
+  description = "dockerhub password"
 }
