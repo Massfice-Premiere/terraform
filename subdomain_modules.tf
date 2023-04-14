@@ -4,14 +4,14 @@ module "subdomain_module" {
   for_each = {
     example_subdomain = {
       name         = "ingress"
-      service_name = "nginx"
+      service_name = "todo-example"
       service_port = 80
       sub          = "example"
       location     = "apps/standard/example/ingress.yaml"
     }
     example_subdomain_2 = {
       name         = "ingress"
-      service_name = "nginx"
+      service_name = "todo-example"
       service_port = 80
       sub          = "example2"
       location     = "apps/standard/example2/ingress.yaml"
