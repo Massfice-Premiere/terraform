@@ -1,4 +1,4 @@
-module "secret_module" {
+module "subdomain_module" {
   source = "./modules/subdomain_module"
 
   for_each = {

@@ -1,3 +1,23 @@
+resource "tls_private_key" "sealed-secret-key" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+resource "tls_self_signed_cert" "sealed-secret-cert" {
+  private_key_pem       = tls_private_key.sealed-secret-key.private_key_pem
+  validity_period_hours = 87660
+  allowed_uses = [
+    "key_encipherment",
+    "digital_signature",
+    "server_auth",
+  ]
+
+  subject {
+    common_name  = "sealed_secrets"
+    organization = "sealed_secrets"
+  }
+}
+
 module "secret_module" {
   source = "./modules/secret_module"
 
