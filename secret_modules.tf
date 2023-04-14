@@ -58,6 +58,7 @@ module "secret_module" {
     pull_secret_example_2 = {
       name      = "pull-secret"
       namespace = "example2"
+      type      = "kubernetes.io/dockerconfigjson"
       location  = "apps/standard/example2/pull-secret.yaml"
       data = {
         ".dockerconfigjson" = jsonencode({
