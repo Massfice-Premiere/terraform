@@ -10,7 +10,13 @@ terraform {
   }
 }
 
-resource "sealedsecret_raw_secrets" "secret" {
+data "github_repository_file" "sealed-secret-template-yaml" {
+  repository = var.github_argocd-repo
+  file       = "templates/sealed-secret.template.yaml"
+  branch     = "main"
+}
+
+resource "sealedsecret_raw_secrets" "secret-data" {
   name        = var.name
   namespace   = var.namespace
   certificate = var.sealing_certificate
@@ -18,11 +24,11 @@ resource "sealedsecret_raw_secrets" "secret" {
 }
 
 data "template_file" "sealed-secret-yaml" {
-  template = file("templates/sealed-secret.template.yaml")
+  template = data.github_repository_file.sealed-secret-template-yaml.content
   vars = {
     SECRET_NAME = var.name
     SECRET_TYPE = var.type
-    SECRET_DATA = yamlencode(sealedsecret_raw_secrets.secret.encrypted_values)
+    SECRET_DATA = yamlencode(sealedsecret_raw_secrets.secret-data.encrypted_values)
   }
 }
 
