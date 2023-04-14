@@ -28,7 +28,7 @@ data "template_file" "sealed-secret-yaml" {
   vars = {
     SECRET_NAME = var.name
     SECRET_TYPE = var.type
-    SECRET_DATA = yamlencode(sealedsecret_raw_secrets.secret-data.encrypted_values)
+    SECRET_DATA = trimspace(yamlencode(sealedsecret_raw_secrets.secret-data.encrypted_values))
   }
 }
 
