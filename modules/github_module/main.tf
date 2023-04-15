@@ -7,11 +7,6 @@ terraform {
   }
 }
 
-provider "github" {
-  token = var.token
-  owner = var.owner
-}
-
 resource "tls_private_key" "tls-key" {
   algorithm = "RSA"
   rsa_bits  = 4096

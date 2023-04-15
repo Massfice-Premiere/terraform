@@ -45,10 +45,12 @@ module "mongodbatlas_module" {
 module "github_module" {
   source = "./modules/github_module"
 
-  token          = var.github_token
-  owner          = var.github_owner
   argocd-repo    = var.github_argo_repo
   cluster-domain = var.domain
+
+  providers = {
+    github = github.github
+  }
 }
 
 module "kubernetes_module" {
