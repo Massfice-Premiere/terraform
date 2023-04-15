@@ -47,6 +47,7 @@ module "github_module" {
 
   argocd-repo    = var.github_argo_repo
   cluster-domain = var.domain
+  owner          = var.github_owner
 
   providers = {
     github = github.github
