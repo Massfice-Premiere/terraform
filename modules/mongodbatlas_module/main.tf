@@ -52,9 +52,8 @@ resource "random_password" "prod-user-password" {
 }
 
 resource "mongodbatlas_database_user" "nonprod-user" {
-  username = "${var.db_name}-nonprod-user"
-  # password           = random_password.nonprod-user-password.result
-  password           = "124122152fwawgagawr1rfagawga"
+  username           = "${var.db_name}-nonprod-user"
+  password           = random_password.nonprod-user-password.result
   project_id         = var.project_id
   auth_database_name = "admin"
 
@@ -65,9 +64,8 @@ resource "mongodbatlas_database_user" "nonprod-user" {
 }
 
 resource "mongodbatlas_database_user" "prod-user" {
-  username = "${var.db_name}-prod-user"
-  # password           = random_password.prod-user-password.result
-  password           = "124122152fwawgagawr1rfagawga"
+  username           = "${var.db_name}-prod-user"
+  password           = random_password.prod-user-password.result
   project_id         = var.project_id
   auth_database_name = "admin"
 
