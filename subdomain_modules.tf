@@ -13,7 +13,7 @@ module "subdomain_module" {
       name         = "ingress"
       service_name = "todo-example"
       service_port = 80
-      sub          = "example2"
+      sub          = "example-2"
       location     = "apps/standard/example2/ingress.yaml"
     }
   }
