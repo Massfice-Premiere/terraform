@@ -23,27 +23,21 @@ module "secret_module" {
 
   for_each = {
     database_prod_connection_for_example_namespace = {
-      name      = "database-connection"
+      name      = "database-connection-secret"
       namespace = "example"
       type      = "Opaque"
       location  = "apps/standard/example/database-connection-secret.yaml"
       data = {
-        MONGO_URI      = replace(module.mongodbatlas_module.prod-connection-string, "mongodb+srv://", "mongodb+srv://${module.mongodbatlas_module.prod-user-username}:${module.mongodbatlas_module.prod-user-password}@")
-        MONGO_HOST     = module.mongodbatlas_module.prod-connection-string
-        MONGO_USERNAME = module.mongodbatlas_module.prod-user-username
-        MONGO_PASSWORD = module.mongodbatlas_module.prod-user-password
+        MONGO_URI = replace(module.mongodbatlas_module.prod-connection-string, "mongodb+srv://", "mongodb+srv://${module.mongodbatlas_module.prod-user-username}:${module.mongodbatlas_module.prod-user-password}@")
       }
     }
     database_nonprod_connection_for_example2_namespace = {
-      name      = "database-connection"
+      name      = "database-connection-secret"
       namespace = "example2"
       type      = "Opaque"
       location  = "apps/standard/example2/database-connection-secret.yaml"
       data = {
-        MONGO_URI      = replace(module.mongodbatlas_module.nonprod-connection-string, "mongodb+srv://", "mongodb+srv://${module.mongodbatlas_module.nonprod-user-username}:${module.mongodbatlas_module.nonprod-user-password}@")
-        MONGO_HOST     = module.mongodbatlas_module.nonprod-connection-string
-        MONGO_USERNAME = module.mongodbatlas_module.nonprod-user-username
-        MONGO_PASSWORD = module.mongodbatlas_module.nonprod-user-password
+        MONGO_URI = replace(module.mongodbatlas_module.nonprod-connection-string, "mongodb+srv://", "mongodb+srv://${module.mongodbatlas_module.nonprod-user-username}:${module.mongodbatlas_module.nonprod-user-password}@")
       }
     }
     pull_secret_for_example_namespace = {
