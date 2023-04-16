@@ -58,7 +58,7 @@ resource "mongodbatlas_database_user" "nonprod-user" {
   auth_database_name = "admin"
 
   roles {
-    role_name     = "readWrite"
+    role_name     = "dbAdmin"
     database_name = mongodbatlas_serverless_instance.nonprod-db.name
   }
 }
@@ -70,7 +70,7 @@ resource "mongodbatlas_database_user" "prod-user" {
   auth_database_name = "admin"
 
   roles {
-    role_name     = "readWrite"
+    role_name     = "dbAdmin"
     database_name = mongodbatlas_serverless_instance.prod-db.name
   }
 }
