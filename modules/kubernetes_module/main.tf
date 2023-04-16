@@ -187,6 +187,27 @@ resource "helm_release" "argocd" {
   }
 }
 
+resource "helm_release" "argocd-image-updater" {
+  name       = "argocd-image-updater"
+  repository = "https://argoproj.github.io/argo-helm"
+  chart      = "argocd-image-updater"
+  namespace  = "argocd"
+
+  depends_on = [
+    kubernetes_namespace.argocd
+  ]
+
+  set {
+    name  = "createCustomResource"
+    value = "true"
+  }
+
+  set {
+    name  = "installCRDs"
+    value = "true"
+  }
+}
+
 resource "helm_release" "argocd-base" {
   name                       = "argocd-base"
   chart                      = "./charts/argocd-base"
