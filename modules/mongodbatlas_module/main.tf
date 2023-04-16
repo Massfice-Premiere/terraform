@@ -63,11 +63,6 @@ resource "mongodbatlas_database_user" "nonprod-user" {
   }
 
   roles {
-    role_name     = "userAdminAnyDatabase "
-    database_name = "admin"
-  }
-
-  roles {
     role_name     = "readWriteAnyDatabase "
     database_name = "admin"
   }
@@ -86,11 +81,6 @@ resource "mongodbatlas_database_user" "prod-user" {
 
   roles {
     role_name     = "dbAdminAnyDatabase"
-    database_name = "admin"
-  }
-
-  roles {
-    role_name     = "userAdminAnyDatabase "
     database_name = "admin"
   }
 
