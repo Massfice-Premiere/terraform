@@ -63,6 +63,7 @@ resource "mongodbatlas_database_user" "nonprod-user" {
 
   scopes {
     name = mongodbatlas_serverless_instance.nonprod-db.name
+    type = "CLUSTER"
   }
 }
 
@@ -78,6 +79,7 @@ resource "mongodbatlas_database_user" "prod-user" {
 
   scopes {
     name = mongodbatlas_serverless_instance.prod-db.name
+    type = "CLUSTER"
   }
 }
 
