@@ -61,6 +61,12 @@ resource "kubernetes_namespace" "sealed-secrets" {
   }
 }
 
+resource "kubernetes_namespace" "reloader" {
+  metadata {
+    name = "reloader"
+  }
+}
+
 resource "kubernetes_secret" "selead_secret_secret" {
   data = {
     "tls.crt" = var.sealed-secret-cert
@@ -225,6 +231,27 @@ resource "helm_release" "sealed-secrets" {
 
   depends_on = [
     kubernetes_secret.selead_secret_secret
+  ]
+
+  set {
+    name  = "createCustomResource"
+    value = "true"
+  }
+
+  set {
+    name  = "installCRDs"
+    value = "true"
+  }
+}
+
+resource "helm_release" "reloader" {
+  name       = "reloader"
+  repository = "https://stakater.github.io/stakater-charts"
+  chart      = "reloader"
+  namespace  = "reloader"
+
+  depends_on = [
+    kubernetes_namespace.reloader
   ]
 
   set {
