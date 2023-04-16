@@ -28,7 +28,7 @@ module "secret_module" {
       type      = "Opaque"
       location  = "apps/standard/example/database-connection-secret.yaml"
       data = {
-        MONGO_URI = replace(module.mongodbatlas_module.prod-connection-string, "mongodb+srv://", "mongodb+srv://${module.mongodbatlas_module.prod-user-username}:${module.mongodbatlas_module.prod-user-password}@")
+        MONGO_URI = replace(module.mongodbatlas_module.prod-connection-string, "mongodb+srv://", "mongodb+srv://${module.mongodbatlas_module.prod-user-username}:${urlencode(module.mongodbatlas_module.prod-user-password)}@")
       }
     }
     database_nonprod_connection_for_example2_namespace = {
