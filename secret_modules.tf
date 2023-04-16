@@ -22,25 +22,25 @@ module "secret_module" {
   source = "./modules/secret_module"
 
   for_each = {
-    example_secret = {
-      name      = "example-secret"
+    database_prod_connection_for_example_namespace = {
+      name      = "database-connection"
       namespace = "example"
       type      = "Opaque"
-      location  = "apps/standard/example/example-secret.yaml"
+      location  = "apps/standard/example/database-connection-secret.yaml"
       data = {
-        EXAMPLE_VALUE = "example value"
+        MONGO_URI = replace(module.mongodbatlas_module.prod-connection-string, "mongodb+srv://", "mongodb+srv://${module.mongodbatlas_module.prod-user-username}:${module.mongodbatlas_module.prod-user-password}@")
       }
     }
-    example_secret_2 = {
-      name      = "example-secret"
+    database_nonprod_connection_for_example2_namespace = {
+      name      = "database-connection"
       namespace = "example2"
       type      = "Opaque"
-      location  = "apps/standard/example2/example-secret.yaml"
+      location  = "apps/standard/example/database-connection-secret.yaml"
       data = {
-        EXAMPLE_VALUE = "example value"
+        MONGO_URI = replace(module.mongodbatlas_module.nonprod-connection-string, "mongodb+srv://", "mongodb+srv://${module.mongodbatlas_module.nonprod-user-username}:${module.mongodbatlas_module.nonprod-user-password}@")
       }
     }
-    pull_secret_example = {
+    pull_secret_for_example_namespace = {
       name      = "pull-secret"
       namespace = "example"
       type      = "kubernetes.io/dockerconfigjson"
@@ -55,7 +55,7 @@ module "secret_module" {
         })
       }
     }
-    pull_secret_example_2 = {
+    pull_secret_for_example2_namespace = {
       name      = "pull-secret"
       namespace = "example2"
       type      = "kubernetes.io/dockerconfigjson"
