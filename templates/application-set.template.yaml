@@ -4,6 +4,7 @@ metadata:
   name: standard-apps
   namespace: argocd
 spec:
+  goTemplate: true
   generators:
   - git:
       repoURL: ${REPO_URL}
