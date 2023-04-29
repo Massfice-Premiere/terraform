@@ -4,11 +4,11 @@ output "private_key" {
 }
 
 output "init-yaml" {
-  value       = data.template_file.init-yaml.rendered
+  value       = local.init_yaml
   description = "rendered init.yaml"
 }
 
 output "projects-yaml" {
-  value       = data.template_file.projects-yaml.rendered
+  value       = local.projects_yaml
   description = "projects.yaml"
 }

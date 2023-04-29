@@ -10,12 +10,6 @@ terraform {
   }
 }
 
-data "github_repository_file" "sealed-secret-template-yaml" {
-  repository = var.github_argocd-repo
-  file       = "templates/sealed-secret.template.yaml"
-  branch     = "main"
-}
-
 resource "sealedsecret_raw_secrets" "secret-data" {
   name        = var.name
   namespace   = var.namespace
@@ -23,13 +17,12 @@ resource "sealedsecret_raw_secrets" "secret-data" {
   values      = var.data
 }
 
-data "template_file" "sealed-secret-yaml" {
-  template = data.github_repository_file.sealed-secret-template-yaml.content
-  vars = {
-    SECRET_NAME = var.name
-    SECRET_TYPE = var.type
-    SECRET_DATA = replace(trimspace(yamlencode({ for k, v in sealedsecret_raw_secrets.secret-data.encrypted_values : "    ${k}" => v })), "\"", "")
-  }
+locals {
+  sealed_secret_yaml = templatefile("./templates/sealed-secret.template.yaml", {
+    NAME = var.name
+    TYPE = var.type
+    DATA = sealedsecret_raw_secrets.secret-data.encrypted_values
+  })
 }
 
 resource "github_repository_file" "sealed-secret" {
@@ -37,5 +30,5 @@ resource "github_repository_file" "sealed-secret" {
   branch         = "main"
   file           = var.location
   commit_message = "Terraform > ${var.location}"
-  content        = data.template_file.sealed-secret-yaml.rendered
+  content        = local.sealed_secret_yaml
 }

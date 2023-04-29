@@ -26,30 +26,14 @@ resource "github_repository_webhook" "argocd-webhook" {
   }
 }
 
-data "github_repository_file" "init-template-yaml" {
-  repository = var.argocd-repo
-  file       = "templates/init.template.yaml"
-  branch     = "main"
-}
-
-data "github_repository_file" "projects-template-yaml" {
-  repository = var.argocd-repo
-  file       = "templates/projects.template.yaml"
-  branch     = "main"
-}
-
-data "template_file" "init-yaml" {
-  template = data.github_repository_file.init-template-yaml.content
-  vars = {
+locals {
+  init_yaml = templatefile("./templates/init.template.yaml", {
     REPO_URL = "git@github.com:${var.owner}/${var.argocd-repo}.git"
-  }
-}
+  })
 
-data "template_file" "projects-yaml" {
-  template = data.github_repository_file.projects-template-yaml.content
-  vars = {
+  projects_yaml = templatefile("./templates/projects.template.yaml", {
     REPO_URL = "git@github.com:${var.owner}/${var.argocd-repo}.git"
-  }
+  })
 }
 
 resource "github_repository_file" "init-yaml" {
@@ -57,7 +41,7 @@ resource "github_repository_file" "init-yaml" {
   branch         = "main"
   file           = "apps/init/init.yaml"
   commit_message = "Terraform > init.yaml"
-  content        = data.template_file.init-yaml.rendered
+  content        = local.init_yaml
 }
 
 resource "github_repository_file" "projects-yaml" {
@@ -65,5 +49,5 @@ resource "github_repository_file" "projects-yaml" {
   branch         = "main"
   file           = "apps/init/projects.yaml"
   commit_message = "Terraform > projects.yaml"
-  content        = data.template_file.projects-yaml.rendered
+  content        = local.projects_yaml
 }
