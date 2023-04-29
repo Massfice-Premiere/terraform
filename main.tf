@@ -139,13 +139,13 @@ module "secret_module" {
     MONGO_HOST_NONPROD     = module.mongodbatlas_module.nonprod-connection-string
     MONGO_USERNAME_NONPROD = module.mongodbatlas_module.nonprod-user-username
     MONGO_PASSWORD_NONPROD = urlencode(module.mongodbatlas_module.nonprod-user-password)
-    DOCKER_CONFIG = jsonencode({
+    DOCKER_CONFIG = replace(jsonencode({
       auths = {
         "https://index.docker.io/v1/" = {
           auth = base64encode("${var.dockerhub_username}:${var.dockerhub_password}")
         }
       }
-    })
+    }), "\"", "\\\"")
   })))
   # for_each = {
   #   database_prod_connection_for_example_namespace = {
