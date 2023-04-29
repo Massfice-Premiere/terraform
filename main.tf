@@ -130,62 +130,79 @@ module "ingress_module" {
 module "secret_module" {
   source = "./modules/secret_module"
 
-  for_each = {
-    database_prod_connection_for_example_namespace = {
-      name      = "database-connection-secret"
-      namespace = "example"
-      type      = "Opaque"
-      location  = "apps/standard/example/database-connection-secret.yaml"
-      data = {
-        MONGO_URI      = replace(module.mongodbatlas_module.prod-connection-string, "mongodb+srv://", "mongodb+srv://${module.mongodbatlas_module.prod-user-username}:${urlencode(module.mongodbatlas_module.prod-user-password)}@")
-        MONGO_HOST     = module.mongodbatlas_module.prod-connection-string
-        MONGO_USERNAME = module.mongodbatlas_module.prod-user-username
-        MONGO_PASSWORD = urlencode(module.mongodbatlas_module.prod-user-password)
+  for_each = toset(jsondecode(templatefile("./configs/secrets.json", {
+    MONGO_URI_PROD         = replace(module.mongodbatlas_module.prod-connection-string, "mongodb+srv://", "mongodb+srv://${module.mongodbatlas_module.prod-user-username}:${urlencode(module.mongodbatlas_module.prod-user-password)}@")
+    MONGO_HOST_PROD        = module.mongodbatlas_module.prod-connection-string
+    MONGO_USERNAME_PROD    = module.mongodbatlas_module.prod-user-username
+    MONGO_PASSWORD_PROD    = urlencode(module.mongodbatlas_module.prod-user-password)
+    MONGO_URI_NONPROD      = replace(module.mongodbatlas_module.nonprod-connection-string, "mongodb+srv://", "mongodb+srv://${module.mongodbatlas_module.nonprod-user-username}:${urlencode(module.mongodbatlas_module.nonprod-user-password)}@")
+    MONGO_HOST_NONPROD     = module.mongodbatlas_module.nonprod-connection-string
+    MONGO_USERNAME_NONPROD = module.mongodbatlas_module.nonprod-user-username
+    MONGO_PASSWORD_NONPROD = urlencode(module.mongodbatlas_module.nonprod-user-password)
+    DOCKER_CONFIG = jsonencode({
+      auths = {
+        "https://index.docker.io/v1/" = {
+          auth = base64encode("${var.dockerhub_username}:${var.dockerhub_password}")
+        }
       }
-    }
-    database_nonprod_connection_for_example2_namespace = {
-      name      = "database-connection-secret"
-      namespace = "example2"
-      type      = "Opaque"
-      location  = "apps/standard/example2/database-connection-secret.yaml"
-      data = {
-        MONGO_URI      = replace(module.mongodbatlas_module.nonprod-connection-string, "mongodb+srv://", "mongodb+srv://${module.mongodbatlas_module.nonprod-user-username}:${urlencode(module.mongodbatlas_module.nonprod-user-password)}@")
-        MONGO_HOST     = module.mongodbatlas_module.nonprod-connection-string
-        MONGO_USERNAME = module.mongodbatlas_module.nonprod-user-username
-        MONGO_PASSWORD = urlencode(module.mongodbatlas_module.nonprod-user-password)
-      }
-    }
-    pull_secret_for_example_namespace = {
-      name      = "pull-secret"
-      namespace = "example"
-      type      = "kubernetes.io/dockerconfigjson"
-      location  = "apps/standard/example/pull-secret.yaml"
-      data = {
-        ".dockerconfigjson" = jsonencode({
-          auths = {
-            "https://index.docker.io/v1/" = {
-              auth = base64encode("${var.dockerhub_username}:${var.dockerhub_password}")
-            }
-          }
-        })
-      }
-    }
-    pull_secret_for_example2_namespace = {
-      name      = "pull-secret"
-      namespace = "example2"
-      type      = "kubernetes.io/dockerconfigjson"
-      location  = "apps/standard/example2/pull-secret.yaml"
-      data = {
-        ".dockerconfigjson" = jsonencode({
-          auths = {
-            "https://index.docker.io/v1/" = {
-              auth = base64encode("${var.dockerhub_username}:${var.dockerhub_password}")
-            }
-          }
-        })
-      }
-    }
-  }
+    })
+  })))
+  # for_each = {
+  #   database_prod_connection_for_example_namespace = {
+  #     name      = "database-connection-secret"
+  #     namespace = "example"
+  #     type      = "Opaque"
+  #     location  = "apps/standard/example/database-connection-secret.yaml"
+  #     data = {
+  #       MONGO_URI      = replace(module.mongodbatlas_module.prod-connection-string, "mongodb+srv://", "mongodb+srv://${module.mongodbatlas_module.prod-user-username}:${urlencode(module.mongodbatlas_module.prod-user-password)}@")
+  #       MONGO_HOST     = module.mongodbatlas_module.prod-connection-string
+  #       MONGO_USERNAME = module.mongodbatlas_module.prod-user-username
+  #       MONGO_PASSWORD = urlencode(module.mongodbatlas_module.prod-user-password)
+  #     }
+  #   }
+  #   database_nonprod_connection_for_example2_namespace = {
+  #     name      = "database-connection-secret"
+  #     namespace = "example2"
+  #     type      = "Opaque"
+  #     location  = "apps/standard/example2/database-connection-secret.yaml"
+  #     data = {
+  #       MONGO_URI      = replace(module.mongodbatlas_module.nonprod-connection-string, "mongodb+srv://", "mongodb+srv://${module.mongodbatlas_module.nonprod-user-username}:${urlencode(module.mongodbatlas_module.nonprod-user-password)}@")
+  #       MONGO_HOST     = module.mongodbatlas_module.nonprod-connection-string
+  #       MONGO_USERNAME = module.mongodbatlas_module.nonprod-user-username
+  #       MONGO_PASSWORD = urlencode(module.mongodbatlas_module.nonprod-user-password)
+  #     }
+  #   }
+  #   pull_secret_for_example_namespace = {
+  #     name      = "pull-secret"
+  #     namespace = "example"
+  #     type      = "kubernetes.io/dockerconfigjson"
+  #     location  = "apps/standard/example/pull-secret.yaml"
+  #     data = {
+  #       ".dockerconfigjson" = jsonencode({
+  #         auths = {
+  #           "https://index.docker.io/v1/" = {
+  #             auth = base64encode("${var.dockerhub_username}:${var.dockerhub_password}")
+  #           }
+  #         }
+  #       })
+  #     }
+  #   }
+  #   pull_secret_for_example2_namespace = {
+  #     name      = "pull-secret"
+  #     namespace = "example2"
+  #     type      = "kubernetes.io/dockerconfigjson"
+  #     location  = "apps/standard/example2/pull-secret.yaml"
+  #     data = {
+  #       ".dockerconfigjson" = jsonencode({
+  #         auths = {
+  #           "https://index.docker.io/v1/" = {
+  #             auth = base64encode("${var.dockerhub_username}:${var.dockerhub_password}")
+  #           }
+  #         }
+  #       })
+  #     }
+  #   }
+  # }
 
   name                = each.value.name
   namespace           = each.value.namespace
