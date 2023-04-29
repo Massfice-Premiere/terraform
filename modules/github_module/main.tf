@@ -31,6 +31,10 @@ locals {
     REPO_URL = "git@github.com:${var.owner}/${var.argocd-repo}.git"
   })
 
+  application_set_yaml = templatefile("./templates/application-set.template.yaml", {
+    REPO_URL = "git@github.com:${var.owner}/${var.argocd-repo}.git"
+  })
+
   projects_yaml = templatefile("./templates/projects.template.yaml", {
     REPO_URL = "git@github.com:${var.owner}/${var.argocd-repo}.git"
   })
@@ -50,4 +54,12 @@ resource "github_repository_file" "projects-yaml" {
   file           = "apps/init/projects.yaml"
   commit_message = "Terraform > projects.yaml"
   content        = local.projects_yaml
+}
+
+resource "github_repository_file" "application-set-yaml" {
+  repository     = var.argocd-repo
+  branch         = "main"
+  file           = "apps/init/application-set.yaml"
+  commit_message = "Terraform > projects.yaml"
+  content        = local.application_set_yaml
 }
