@@ -5,7 +5,7 @@
     "service_name": "todo-example",
     "service_port": 80,
     "sub": "example",
-    "location": "apps/standard/example/ingress.yaml"
+    "location": "apps/example/ingress.yaml"
   },
   {
     "id": "5f3fc375-482c-438f-a5c7-31681f0cd413",
@@ -13,6 +13,6 @@
     "service_name": "todo-example",
     "service_port": 80,
     "sub": "example2",
-    "location": "apps/standard/example2/ingress.yaml"
+    "location": "apps/example2/ingress.yaml"
   }
 ]

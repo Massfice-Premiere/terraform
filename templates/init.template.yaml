@@ -30,20 +30,28 @@ spec:
   - git:
       repoURL: ${REPO_URL}
       revision: HEAD
-      directories:
-      - path: apps/standard/*
+      files:
+      - path: apps/**.json
   template:
     metadata:
-      name: '{{path.basename}}'
+      name: '{{ .name }}'
+      labels:
+        argocd-image-updater.argoproj.io/write-back-method: git
+        argocd-image-updater.argoproj.io/write-back-target: kustomization
+        argocd-image-updater.argoproj.io/git-branch: main
+        {{- range .containers }}
+        argocd-image-updater.argoproj.io/image-list: {{ .id }}={{ .image }}
+        argocd-image-updater.argoproj.io/{{ .id }}.update-strategy: {{ .strategy }}
+        {{- end }}
     spec:
       project: default
       source:
         repoURL: ${REPO_URL}
         targetRevision: HEAD
-        path: '{{path}}'
+        path: '{{ path }}/{{ .dir }}'
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{path.basename}}'
+        namespace: '{{ .namespace }}'
       syncPolicy:
         syncOptions:
           - CreateNamespace=true
