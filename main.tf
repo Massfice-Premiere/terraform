@@ -95,7 +95,7 @@ module "kubernetes_module" {
 }
 
 module "ingress_module" {
-  source = "./modules/subdomain_module"
+  source = "./modules/ingress_module"
 
   for_each = {
     example_subdomain = {
