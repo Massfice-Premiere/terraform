@@ -130,7 +130,7 @@ module "ingress_module" {
 module "secret_module" {
   source = "./modules/secret_module"
 
-  for_each = toset(jsondecode(templatefile("./configs/secrets.json", {
+  for_each = nonsensitive(toset(jsondecode(templatefile("./configs/secrets.json", {
     MONGO_URI_PROD         = replace(module.mongodbatlas_module.prod-connection-string, "mongodb+srv://", "mongodb+srv://${module.mongodbatlas_module.prod-user-username}:${urlencode(module.mongodbatlas_module.prod-user-password)}@")
     MONGO_HOST_PROD        = module.mongodbatlas_module.prod-connection-string
     MONGO_USERNAME_PROD    = module.mongodbatlas_module.prod-user-username
@@ -146,7 +146,7 @@ module "secret_module" {
         }
       }
     }), "\"", "\\\"")
-  })))
+  }))))
   # for_each = {
   #   database_prod_connection_for_example_namespace = {
   #     name      = "database-connection-secret"
