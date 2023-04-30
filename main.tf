@@ -119,9 +119,7 @@ locals {
 module "secret_module" {
   source = "./modules/secret_module"
 
-  for_each = nonsensitive(tomap({
-    for secret in local.secrets : "${secret.id}" => secret
-  }))
+  for_each = nonsensitive(local.secrets)
 
   name                = each.value.name
   namespace           = each.value.namespace
@@ -140,9 +138,7 @@ module "secret_module" {
 module "ingress_module" {
   source = "./modules/ingress_module"
 
-  for_each = tomap({
-    for ingress in local.ingresses : "${ingress.id}" => ingress
-  })
+  for_each = local.ingresses
 
   name               = each.value.name
   service_name       = each.value.service_name

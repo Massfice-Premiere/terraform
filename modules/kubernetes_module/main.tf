@@ -303,11 +303,11 @@ resource "time_sleep" "wait-for-5-mins-for-argocd-cleanup" {
   ]
 }
 
-resource "kubectl_manifest" "init" {
-  for_each  = toset(split("\n---\n", var.init-yaml))
-  yaml_body = each.key
+# resource "kubectl_manifest" "init" {
+#   for_each  = toset(split("\n---\n", var.init-yaml))
+#   yaml_body = each.key
 
-  depends_on = [
-    time_sleep.wait-for-5-mins-for-argocd-cleanup
-  ]
-}
+#   depends_on = [
+#     time_sleep.wait-for-5-mins-for-argocd-cleanup
+#   ]
+# }

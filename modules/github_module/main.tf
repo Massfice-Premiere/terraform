@@ -56,10 +56,10 @@ resource "github_repository_file" "projects-yaml" {
   content        = local.projects_yaml
 }
 
-resource "github_repository_file" "application-set-yaml" {
-  repository     = var.argocd-repo
-  branch         = "main"
-  file           = "apps/init/application-set.yaml"
-  commit_message = "Terraform > projects.yaml"
-  content        = local.application_set_yaml
-}
+# resource "github_repository_file" "application-set-yaml" {
+#   repository     = var.argocd-repo
+#   branch         = "main"
+#   file           = "apps/init/application-set.yaml"
+#   commit_message = "Terraform > projects.yaml"
+#   content        = local.application_set_yaml
+# }
