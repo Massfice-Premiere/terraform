@@ -43,7 +43,7 @@ locals {
 resource "github_repository_file" "init-yaml" {
   repository     = var.argocd-repo
   branch         = "main"
-  file           = "apps/init/init.yaml"
+  file           = "core/init/init.yaml"
   commit_message = "Terraform > init.yaml"
   content        = local.init_yaml
 }
@@ -51,15 +51,15 @@ resource "github_repository_file" "init-yaml" {
 resource "github_repository_file" "projects-yaml" {
   repository     = var.argocd-repo
   branch         = "main"
-  file           = "apps/init/projects.yaml"
+  file           = "core/init/projects.yaml"
   commit_message = "Terraform > projects.yaml"
   content        = local.projects_yaml
 }
 
-# resource "github_repository_file" "application-set-yaml" {
-#   repository     = var.argocd-repo
-#   branch         = "main"
-#   file           = "apps/init/application-set.yaml"
-#   commit_message = "Terraform > projects.yaml"
-#   content        = local.application_set_yaml
-# }
+resource "github_repository_file" "application-set-yaml" {
+  repository     = var.argocd-repo
+  branch         = "main"
+  file           = "core/init/application-set.yaml"
+  commit_message = "Terraform > projects.yaml"
+  content        = local.application_set_yaml
+}

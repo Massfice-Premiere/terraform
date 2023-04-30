@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: standard-apps
+  name: apps
   namespace: argocd
 spec:
   goTemplate: true
@@ -10,27 +10,38 @@ spec:
       repoURL: ${REPO_URL}
       revision: HEAD
       files:
-      - path: apps/**.json
+      - path: apps/_configs/**.json
   template:
     metadata:
-      name: '{{ .name }}'
-      labels:
-        argocd-image-updater.argoproj.io/write-back-method: git
-        argocd-image-updater.argoproj.io/write-back-target: kustomization
-        argocd-image-updater.argoproj.io/git-branch: main
-        {{- range .containers }}
-        argocd-image-updater.argoproj.io/image-list: {{ .id }}={{ .image }}
-        argocd-image-updater.argoproj.io/{{ .id }}.update-strategy: {{ .strategy }}
-        {{- end }}
+      name: '{{ .app_name }}-init'
     spec:
-      project: default
+      project: apps
       source:
         repoURL: ${REPO_URL}
         targetRevision: HEAD
-        path: '{{ .path.path }}/{{ .dir }}'
+        path: core/app
+        helm:
+          values: |
+            app_name: {{ .app_name }}
+            app_namespace: {{ .app_namespace }}
+            app_repo: ${REPO_URL}
+            app_path: apps/{{ .app_dir }}
+            app_annotations:
+              - key: argocd-image-updater.argoproj.io/write-back-method
+                value: git
+              - key: argocd-image-updater.argoproj.io/write-back-target
+                value: kustomization
+              - key: argocd-image-updater.argoproj.io/git-branch
+                value: main
+              - key: argocd-image-updater.argoproj.io/image-list
+                value: {{ range $index, $element := .app_containers }}{{ if $index }},{{ end }}{{ $element.id }}={{ $element.image }}{{end}}
+              {{- range $index, $element := .app_containers }}
+              - key: argocd-image-updater.argoproj.io/{{ $element.id }}.update-strategy
+                value: {{ $element.strategy }}
+              {{- end }}
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{ .namespace }}'
+        namespace: argocd
       syncPolicy:
         syncOptions:
           - CreateNamespace=true
