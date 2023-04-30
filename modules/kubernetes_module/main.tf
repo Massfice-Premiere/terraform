@@ -223,14 +223,8 @@ resource "helm_release" "argocd-base" {
   }
 
   set {
-    name = "docker_config_encoded"
-    value = base64encode(jsonencode({
-      auths = {
-        "https://index.docker.io/v1/" = {
-          auth = base64encode("${var.dockerhub_username}:${var.dockerhub_password}")
-        }
-      }
-    }))
+    name  = "docker_config_encoded"
+    value = base64encode("${var.dockerhub_username}:${var.dockerhub_password}")
   }
 }
 
@@ -256,15 +250,15 @@ resource "helm_release" "argocd-image-updater" {
 
   values = [
     <<EOT
-config:
-  registries:
-      - name: "Docker Hub"
-        prefix: "docker.io"
-        api_url: "https://registry-1.docker.io"
-        credentials: "pullsecret:argocd/pull-secret"
-        defaultns: "library"
-        default: true
-EOT
+    config:
+      registries:
+        - name: "Docker Hub"
+          prefix: "docker.io"
+          api_url: "https://registry-1.docker.io"
+          credentials: "secret:argocd/dockerhub-credentials#credentials"
+          defaultns: "library"
+          default: true
+    EOT
   ]
 }
 
