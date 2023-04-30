@@ -313,8 +313,8 @@ resource "kubectl_manifest" "projects" {
   ]
 }
 
-resource "time_sleep" "wait-for-5-mins-for-argocd-cleanup" {
-  destroy_duration = "5m"
+resource "time_sleep" "wait-for-10-mins-for-argocd-cleanup" {
+  destroy_duration = "10m"
 
   depends_on = [
     kubectl_manifest.projects
@@ -326,6 +326,6 @@ resource "kubectl_manifest" "init" {
   yaml_body = each.key
 
   depends_on = [
-    time_sleep.wait-for-5-mins-for-argocd-cleanup
+    time_sleep.wait-for-10-mins-for-argocd-cleanup
   ]
 }
