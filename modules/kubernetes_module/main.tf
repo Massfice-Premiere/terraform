@@ -187,41 +187,6 @@ resource "helm_release" "argocd" {
   }
 }
 
-resource "helm_release" "argocd-image-updater" {
-  name       = "argocd-image-updater"
-  repository = "https://argoproj.github.io/argo-helm"
-  chart      = "argocd-image-updater"
-  namespace  = "argocd"
-
-  depends_on = [
-    kubernetes_namespace.argocd
-  ]
-
-  set {
-    name  = "createCustomResource"
-    value = "true"
-  }
-
-  set {
-    name  = "installCRDs"
-    value = "true"
-  }
-
-  set {
-    name = "config.registries"
-    value = yamlencode([
-      {
-        name        = "Docker Hub"
-        prefix      = "docker.io"
-        api_url     = "https://registry-1.docker.io"
-        credentials = "pullsecret:argocd/pull-secret"
-        defaultns   = "library"
-        default     = true
-      }
-    ])
-  }
-}
-
 resource "helm_release" "argocd-base" {
   name                       = "argocd-base"
   chart                      = "./charts/argocd-base"
@@ -266,6 +231,39 @@ resource "helm_release" "argocd-base" {
         }
       }
     }))
+  }
+}
+
+resource "helm_release" "argocd-image-updater" {
+  name       = "argocd-image-updater"
+  repository = "https://argoproj.github.io/argo-helm"
+  chart      = "argocd-image-updater"
+  namespace  = "argocd"
+
+  depends_on = [
+    helm_release.argocd-base
+  ]
+
+  set {
+    name  = "createCustomResource"
+    value = "true"
+  }
+
+  set {
+    name  = "installCRDs"
+    value = "true"
+  }
+
+  set {
+    name  = "config.registries"
+    value = <<EOT
+      - name: "Docker Hub"
+        prefix: "docker.io"
+        api_url: "https://registry-1.docker.io"
+        credentials: "pullsecret:argocd/pull-secret"
+        defaultns: "library"
+        default: true
+    EOT
   }
 }
 
