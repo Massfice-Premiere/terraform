@@ -173,7 +173,8 @@ resource "helm_release" "argocd-base" {
   disable_openapi_validation = true
 
   depends_on = [
-    helm_release.argocd
+    helm_release.argocd,
+    helm_release.cluster-issuer
   ]
 
   set {
