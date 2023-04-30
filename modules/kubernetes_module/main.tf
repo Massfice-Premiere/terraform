@@ -286,28 +286,28 @@ resource "helm_release" "reloader" {
   }
 }
 
-# resource "kubectl_manifest" "projects" {
-#   for_each  = toset(split("\n---\n", var.projects-yaml))
-#   yaml_body = each.key
+resource "kubectl_manifest" "projects" {
+  for_each  = toset(split("\n---\n", var.projects-yaml))
+  yaml_body = each.key
 
-#   depends_on = [
-#     helm_release.argocd-base
-#   ]
-# }
+  depends_on = [
+    helm_release.argocd-base
+  ]
+}
 
-# resource "time_sleep" "wait-for-5-mins-for-argocd-cleanup" {
-#   destroy_duration = "5m"
+resource "time_sleep" "wait-for-5-mins-for-argocd-cleanup" {
+  destroy_duration = "5m"
 
-#   depends_on = [
-#     kubectl_manifest.projects
-#   ]
-# }
+  depends_on = [
+    kubectl_manifest.projects
+  ]
+}
 
-# resource "kubectl_manifest" "init" {
-#   for_each  = toset(split("\n---\n", var.init-yaml))
-#   yaml_body = each.key
+resource "kubectl_manifest" "init" {
+  for_each  = toset(split("\n---\n", var.init-yaml))
+  yaml_body = each.key
 
-#   depends_on = [
-#     time_sleep.wait-for-5-mins-for-argocd-cleanup
-#   ]
-# }
+  depends_on = [
+    time_sleep.wait-for-5-mins-for-argocd-cleanup
+  ]
+}
