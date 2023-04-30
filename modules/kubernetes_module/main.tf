@@ -254,17 +254,18 @@ resource "helm_release" "argocd-image-updater" {
     value = "true"
   }
 
-  set {
-    name  = "config.registries"
-    value = <<EOT
+  values = [
+    <<EOT
+config:
+  registries:
       - name: "Docker Hub"
         prefix: "docker.io"
         api_url: "https://registry-1.docker.io"
         credentials: "pullsecret:argocd/pull-secret"
         defaultns: "library"
         default: true
-    EOT
-  }
+EOT
+  ]
 }
 
 resource "helm_release" "sealed-secrets" {
