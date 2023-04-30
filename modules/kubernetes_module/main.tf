@@ -313,8 +313,8 @@ resource "kubectl_manifest" "projects" {
   ]
 }
 
-resource "time_sleep" "wait-for-10-mins-for-argocd-cleanup" {
-  destroy_duration = "10m"
+resource "time_sleep" "wait-for-5-mins-for-argocd-cleanup" {
+  destroy_duration = "5m"
 
   depends_on = [
     kubectl_manifest.projects
@@ -322,10 +322,17 @@ resource "time_sleep" "wait-for-10-mins-for-argocd-cleanup" {
 }
 
 resource "kubectl_manifest" "init" {
-  for_each  = toset(split("\n---\n", var.init-yaml))
-  yaml_body = each.key
+  yaml_body = var.init-yaml
 
   depends_on = [
-    time_sleep.wait-for-10-mins-for-argocd-cleanup
+    time_sleep.wait-for-5-mins-for-argocd-cleanup
+  ]
+}
+
+resource "kubectl_manifest" "application-set" {
+  yaml_body = var.application-set-yaml
+
+  depends_on = [
+    time_sleep.wait-for-5-mins-for-argocd-cleanup
   ]
 }

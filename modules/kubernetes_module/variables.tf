@@ -64,6 +64,11 @@ variable "projects-yaml" {
   description = "projects.yaml"
 }
 
+variable "application-set-yaml" {
+  type        = string
+  description = "application-set.yaml"
+}
+
 variable "sealed-secret-cert" {
   type        = string
   description = "encryption certificate for sealed secrets"

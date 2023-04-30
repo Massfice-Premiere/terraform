@@ -12,3 +12,8 @@ output "projects-yaml" {
   value       = local.projects_yaml
   description = "projects.yaml"
 }
+
+output "application-set-yaml" {
+  value       = local.application_set_yaml
+  description = "application-set.yaml"
+}

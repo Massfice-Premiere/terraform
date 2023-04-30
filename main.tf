@@ -85,6 +85,7 @@ module "kubernetes_module" {
   github_private_key     = module.github_module.private_key
   init-yaml              = module.github_module.init-yaml
   projects-yaml          = module.github_module.projects-yaml
+  application-set-yaml   = module.github_module.application-set-yaml
   github_repo_owner      = var.github_owner
   github_argocd_repo     = var.github_argo_repo
   letsencrypt_email      = var.letsencrypt_email
