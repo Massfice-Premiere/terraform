@@ -94,8 +94,10 @@ module "kubernetes_module" {
   sealed-secret-key      = tls_self_signed_cert.sealed-secret-cert.private_key_pem
 }
 
-locals {
-  secrets = jsondecode(templatefile("./configs/secrets.json", {
+module "secret_module" {
+  source = "./modules/secret_module"
+
+  for_each = nonsensitive(jsondecode(templatefile("./configs/secrets.json", {
     MONGO_URI_PROD         = replace(module.mongodbatlas_module.prod-connection-string, "mongodb+srv://", "mongodb+srv://${module.mongodbatlas_module.prod-user-username}:${urlencode(module.mongodbatlas_module.prod-user-password)}@")
     MONGO_HOST_PROD        = module.mongodbatlas_module.prod-connection-string
     MONGO_USERNAME_PROD    = module.mongodbatlas_module.prod-user-username
@@ -111,15 +113,7 @@ locals {
         }
       }
     }), "\"", "\\\"")
-  }))
-
-  ingresses = jsondecode(file("./configs/ingresses.json"))
-}
-
-module "secret_module" {
-  source = "./modules/secret_module"
-
-  for_each = nonsensitive(local.secrets)
+  })))
 
   name                = each.value.name
   namespace           = each.value.namespace
@@ -138,7 +132,7 @@ module "secret_module" {
 module "ingress_module" {
   source = "./modules/ingress_module"
 
-  for_each = local.ingresses
+  for_each = jsondecode(file("./configs/ingresses.json"))
 
   name               = each.value.name
   service_name       = each.value.service_name
