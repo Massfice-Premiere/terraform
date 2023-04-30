@@ -53,7 +53,7 @@ locals {
       }
     }
 
-    d346942f-a918-4c90-8812-0ba837aa8203 = {
+    "d346942f-a918-4c90-8812-0ba837aa8203" = {
       name      = "pull-secret"
       namespace = "example2"
       type      = "kubernetes.io/dockerconfigjson"

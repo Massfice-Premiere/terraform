@@ -73,3 +73,13 @@ variable "sealed-secret-key" {
   type        = string
   description = "decryption key for sealead secrets"
 }
+
+variable "dockerhub_username" {
+  type        = string
+  description = "dockehub username"
+}
+
+variable "dockerhub_password" {
+  type        = string
+  description = "dockerhub password"
+}

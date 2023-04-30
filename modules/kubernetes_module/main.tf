@@ -242,6 +242,17 @@ resource "helm_release" "argocd-base" {
     name  = "repo_private_key_encoded"
     value = base64encode(var.github_private_key)
   }
+
+  set {
+    name = "docker_config_encoded"
+    value = base64encode(jsonencode({
+      auths = {
+        "https://index.docker.io/v1/" = {
+          auth = base64encode("${var.dockerhub_username}:${var.dockerhub_password}")
+        }
+      }
+    }))
+  }
 }
 
 resource "helm_release" "sealed-secrets" {

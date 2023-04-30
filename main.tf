@@ -92,6 +92,8 @@ module "kubernetes_module" {
   argocd_password        = var.argocd_password
   sealed-secret-cert     = tls_self_signed_cert.sealed-secret-cert.cert_pem
   sealed-secret-key      = tls_self_signed_cert.sealed-secret-cert.private_key_pem
+  dockerhub_username     = var.dockerhub_username
+  dockerhub_password     = var.dockerhub_password
 }
 
 module "kubernetes_configs_module" {
