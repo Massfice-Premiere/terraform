@@ -97,23 +97,7 @@ module "kubernetes_module" {
 module "secret_module" {
   source = "./modules/secret_module"
 
-  for_each = nonsensitive(jsondecode(templatefile("./configs/secrets.json", {
-    MONGO_URI_PROD         = replace(module.mongodbatlas_module.prod-connection-string, "mongodb+srv://", "mongodb+srv://${module.mongodbatlas_module.prod-user-username}:${urlencode(module.mongodbatlas_module.prod-user-password)}@")
-    MONGO_HOST_PROD        = module.mongodbatlas_module.prod-connection-string
-    MONGO_USERNAME_PROD    = module.mongodbatlas_module.prod-user-username
-    MONGO_PASSWORD_PROD    = urlencode(module.mongodbatlas_module.prod-user-password)
-    MONGO_URI_NONPROD      = replace(module.mongodbatlas_module.nonprod-connection-string, "mongodb+srv://", "mongodb+srv://${module.mongodbatlas_module.nonprod-user-username}:${urlencode(module.mongodbatlas_module.nonprod-user-password)}@")
-    MONGO_HOST_NONPROD     = module.mongodbatlas_module.nonprod-connection-string
-    MONGO_USERNAME_NONPROD = module.mongodbatlas_module.nonprod-user-username
-    MONGO_PASSWORD_NONPROD = urlencode(module.mongodbatlas_module.nonprod-user-password)
-    DOCKER_CONFIG = replace(jsonencode({
-      auths = {
-        "https://index.docker.io/v1/" = {
-          auth = base64encode("${var.dockerhub_username}:${var.dockerhub_password}")
-        }
-      }
-    }), "\"", "\\\"")
-  })))
+  for_each = local.secrets
 
   name                = each.value.name
   namespace           = each.value.namespace
@@ -132,7 +116,7 @@ module "secret_module" {
 module "ingress_module" {
   source = "./modules/ingress_module"
 
-  for_each = jsondecode(file("./configs/ingresses.json"))
+  for_each = local.ingresses
 
   name               = each.value.name
   service_name       = each.value.service_name
