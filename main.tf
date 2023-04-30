@@ -7,6 +7,18 @@ terraform {
     sealedsecret = {
       source = "2ttech/sealedsecret"
     }
+    helm = {
+      source  = "hashicorp/helm"
+      version = ">= 2.0.1"
+    }
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = ">= 2.0.0"
+    }
+    kubectl = {
+      source  = "gavinbunney/kubectl"
+      version = ">= 1.7.0"
+    }
   }
 }
 
@@ -18,6 +30,30 @@ provider "github" {
 
 provider "sealedsecret" {
   alias = "sealedsecret"
+}
+
+provider "helm" {
+  kubernetes {
+    host                   = module.digitalocean_module.kubernetes_host
+    token                  = module.digitalocean_module.kubernetes_config[0].token
+    cluster_ca_certificate = base64decode(module.digitalocean_module.kubernetes_config[0].cluster_ca_certificate)
+  }
+  alias = "helm"
+}
+
+provider "kubernetes" {
+  host                   = module.digitalocean_module.kubernetes_host
+  token                  = module.digitalocean_module.kubernetes_config[0].token
+  cluster_ca_certificate = base64decode(module.digitalocean_module.kubernetes_config[0].cluster_ca_certificate)
+  alias                  = "kubernetes"
+}
+
+provider "kubectl" {
+  host                   = module.digitalocean_module.kubernetes_host
+  token                  = module.digitalocean_module.kubernetes_config[0].token
+  cluster_ca_certificate = base64decode(module.digitalocean_module.kubernetes_config[0].cluster_ca_certificate)
+  load_config_file       = false
+  alias                  = "kubectl"
 }
 
 resource "tls_private_key" "sealed-secret-key" {
@@ -81,24 +117,27 @@ module "kubernetes_module" {
     module.secret_module, module.ingress_module
   ]
 
-  kubernetes_host        = module.digitalocean_module.kubernetes_host
-  kubernetes_token       = module.digitalocean_module.kubernetes_config[0].token
-  kubernetes_certificate = module.digitalocean_module.kubernetes_config[0].cluster_ca_certificate
-  loadbalancer_id        = module.digitalocean_module.loadbalancer_id
-  loadbalancer_name      = module.digitalocean_module.loadbalancer_name
-  github_private_key     = module.github_module.private_key
-  init-yaml              = module.github_module.init-yaml
-  projects-yaml          = module.github_module.projects-yaml
-  application-set-yaml   = module.github_module.application-set-yaml
-  github_repo_owner      = var.github_owner
-  github_argocd_repo     = var.github_argo_repo
-  letsencrypt_email      = var.letsencrypt_email
-  domain                 = var.domain
-  argocd_password        = var.argocd_password
-  sealed-secret-cert     = tls_self_signed_cert.sealed-secret-cert.cert_pem
-  sealed-secret-key      = tls_self_signed_cert.sealed-secret-cert.private_key_pem
-  dockerhub_username     = var.dockerhub_username
-  dockerhub_password     = var.dockerhub_password
+  loadbalancer_id      = module.digitalocean_module.loadbalancer_id
+  loadbalancer_name    = module.digitalocean_module.loadbalancer_name
+  github_private_key   = module.github_module.private_key
+  init-yaml            = module.github_module.init-yaml
+  projects-yaml        = module.github_module.projects-yaml
+  application-set-yaml = module.github_module.application-set-yaml
+  github_repo_owner    = var.github_owner
+  github_argocd_repo   = var.github_argo_repo
+  letsencrypt_email    = var.letsencrypt_email
+  domain               = var.domain
+  argocd_password      = var.argocd_password
+  sealed-secret-cert   = tls_self_signed_cert.sealed-secret-cert.cert_pem
+  sealed-secret-key    = tls_self_signed_cert.sealed-secret-cert.private_key_pem
+  dockerhub_username   = var.dockerhub_username
+  dockerhub_password   = var.dockerhub_password
+
+  providers = {
+    helm       = helm.helm,
+    kubernetes = kubernetes.kubernetes
+    kubectl    = kubectl.kubectl
+  }
 }
 
 module "kubernetes_configs_module" {

@@ -16,27 +16,6 @@ terraform {
 
 }
 
-provider "helm" {
-  kubernetes {
-    host                   = var.kubernetes_host
-    token                  = var.kubernetes_token
-    cluster_ca_certificate = base64decode(var.kubernetes_certificate)
-  }
-}
-
-provider "kubernetes" {
-  host                   = var.kubernetes_host
-  token                  = var.kubernetes_token
-  cluster_ca_certificate = base64decode(var.kubernetes_certificate)
-}
-
-provider "kubectl" {
-  host                   = var.kubernetes_host
-  token                  = var.kubernetes_token
-  cluster_ca_certificate = base64decode(var.kubernetes_certificate)
-  load_config_file       = false
-}
-
 resource "kubernetes_namespace" "ingress" {
   metadata {
     name = "ingress"
